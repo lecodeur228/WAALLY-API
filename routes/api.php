@@ -9,8 +9,8 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::group(['middleware' => 'ApiKeyVerify', 'prefix' => 'v1'], function(){
-    Route::group(['prefix' => 'users'], function(){
-        Route::post('register', [UserController::class, 'registerUser']);
-        Route::post('login', [UserController::class, 'login']);
+    Route::controller(UserController::class)->prefix('users')->group(function(){
+        Route::post('register', 'registerUser');
+        Route::post('login','login');
     });
 });

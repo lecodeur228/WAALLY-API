@@ -34,7 +34,43 @@ class CreateDefaultRolesAndPermissions extends Command
     {
           // Définir les rôles et les permissions
           $roles = ['admin', 'owner', 'seller'];
-          $permissions = ['manage boutique', 'manage owner' ,'manage seller', 'manage articles', 'manage finance', 'manage stock', 'manage vente'];
+          $permissions = [
+            //'manage boutique', 
+            'create shop',
+            'update shop',
+            'delete shop',
+            'view shop',
+            //'manage owner',
+            'create owner',
+            'update owner',
+            'delete owner',
+            'view owner',
+            //'manage seller'
+            'ceate seller',
+            'update seller',
+            'delete seller',
+            'view seller',
+            //'manage articles',
+            'create articles',
+            'update artcles',
+            'delete articles',
+            'view articles', 
+            //'manage finance',
+            'create finance',
+            'update finance',
+            'delete finance',
+            'view finance', 
+            //'manage stock',
+            'create stock',
+            'update stock',
+            'delete stock',
+            'view stock', 
+            //'manage ventes'
+            'create sale',
+            'update sale',
+            'delete sale',
+            'view sale'
+        ];
   
           // Créer les rôles
           foreach ($roles as $role) {
@@ -48,13 +84,57 @@ class CreateDefaultRolesAndPermissions extends Command
   
           // Assigner les permissions aux rôles
           $adminRole = Role::findByName('admin');
-          $adminRole->givePermissionTo(["manage boutique","manage owner"]);
+          $adminRole->givePermissionTo(
+            [
+            //"manage boutique",
+            'create shop',
+            'update shop',
+            'delete shop',
+            'view shop',
+            //"manage owner",
+            'create owner',
+            'update owner',
+            'delete owner',
+            'view owner',
+            ]
+        );
   
           $ownerRole = Role::findByName('owner');
-          $ownerRole->givePermissionTo(['manage articles', 'manage finance', 'manage stock', 'manage seller']);
+          $ownerRole->givePermissionTo(
+            [
+            //'manage articles',
+            'create articles',
+            'update artcles',
+            'delete articles',
+            'view articles', 
+            //'manage finance',
+            'create finance',
+            'update finance',
+            'delete finance',
+            'view finance', 
+            //'manage stock',
+            'create stock',
+            'update stock',
+            'delete stock',
+            'view stock', 
+            //'manage seller'
+            'ceate seller',
+            'update seller',
+            'delete seller',
+            'view seller',
+            ]
+        );
   
           $sellerRole = Role::findByName('seller');
-          $sellerRole->givePermissionTo(["manage vente"]);
+          $sellerRole->givePermissionTo(
+            [
+            //"manage vente"
+            'create sale',
+            'update sale',
+            'delete sale',
+            'view sale'
+            ]
+        );
 
           $this->info('Rôles et permissions créés avec succès.');
   
