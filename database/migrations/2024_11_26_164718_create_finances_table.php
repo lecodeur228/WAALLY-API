@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Boutique;
+use App\Models\Shop;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('finances', function (Blueprint $table) {
             $table->id();
-            $table->decimal('montant', 10, 2);
+            $table->decimal('amount', 10, 2);
             $table->enum('type', ['Entrer', 'Sortir']);
-            $table->text('motif');
-            $table->foreignIdFor(Boutique::class);
+            $table->text('reason');
+            $table->foreignIdFor(Shop::class);
             $table->timestamps();
         });
     }
