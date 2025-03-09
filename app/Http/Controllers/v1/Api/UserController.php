@@ -20,13 +20,15 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
-    public function clearregisterUser(Request $request)
+    public function registerUser(Request $request)
     {
         // Valider les données de la requête
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
+            'account_type' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
         ]);
 
         // Retourner les erreurs de validation si elles existent
@@ -35,6 +37,7 @@ class UserController extends Controller
         }
 
         $validatedData = $validator->validated();
+
 
         // Vérifier les permissions en fonction du type de compte
         $accountType = AccountType::from($validatedData['account_type']);
@@ -45,7 +48,7 @@ class UserController extends Controller
         }
 
         // Créer l'utilisateur
-        // tu as fais une boucle recursive 
+        // tu as fais une boucle recursive
         $response = $this->userService->registerUser($validatedData,AccountType::from($validatedData['account_type']));
 
         return ApiResponse::success('User created successfully', 201, $response);
