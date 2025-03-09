@@ -34,7 +34,7 @@ class CreateDefaultRolesAndPermissions extends Command
     {
           // Définir les rôles et les permissions
           $roles = ['admin', 'owner', 'seller'];
-          $permissions = ['manage boutique', 'manage owner' ,'manage seller', 'manage articles', 'manage finance', 'manage stock', 'manage vente'];
+          $permissions = ['manage shop', 'manage owner' ,'manage seller', 'manage articles', 'manage finance', 'manage stock', 'manage vente'];
   
           // Créer les rôles
           foreach ($roles as $role) {
@@ -48,7 +48,7 @@ class CreateDefaultRolesAndPermissions extends Command
   
           // Assigner les permissions aux rôles
           $adminRole = Role::findByName('admin');
-          $adminRole->givePermissionTo(["manage boutique","manage owner"]);
+          $adminRole->givePermissionTo(["manage shop","manage owner"]);
   
           $ownerRole = Role::findByName('owner');
           $ownerRole->givePermissionTo(['manage articles', 'manage finance', 'manage stock', 'manage seller']);

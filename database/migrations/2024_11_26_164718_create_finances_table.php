@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Boutique;
+use App\Models\Shop;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +17,8 @@ return new class extends Migration
             $table->decimal('montant', 10, 2);
             $table->enum('type', ['Entrer', 'Sortir']);
             $table->text('motif');
-            $table->foreignIdFor(Boutique::class);
+            $table->foreignIdFor(Shop::class);
+            $table->integer('state')->default(0);
             $table->timestamps();
         });
     }

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class);
             $table->integer('quantite');
             $table->double('prix_total');
+            $table->integer('state')->default(0);
             $table->timestamps();
         });
     }

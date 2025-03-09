@@ -31,4 +31,9 @@ class ShopService
     {
         return $this->shopRepository->delete($id);
     }
+
+    public function assignUserToShop($shopId, $userId)
+    {
+        return $this->shopRepository->assignUserToShop($shopId, $userId);
+    }
 }

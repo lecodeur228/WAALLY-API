@@ -2,14 +2,24 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\StateScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Boutique extends Model
+
+class Shop extends Model
 {
+    use HasFactory;
     
-    protected $fillable = ["name","address","city","latitude","longitude","user_id"];
+    protected $fillable = ["name","description","city","latitude","longitude","user_id"];
 
-    public function user(){
+    protected static function booted()
+    {
+        static::addGlobalScope(new StateScope());
+    }
+
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 

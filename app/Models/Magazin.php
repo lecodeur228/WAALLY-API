@@ -2,15 +2,21 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\StateScope;
 use Illuminate\Database\Eloquent\Model;
 
 class Magazin extends Model
 {
     protected $fillable = ["name","description","boutique_id"];
 
-    public function boutique()
+    protected static function booted()
     {
-        return $this->belongsTo(Boutique::class);
+        static::addGlobalScope(new StateScope());
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
     }
 
     public function inventaires(){

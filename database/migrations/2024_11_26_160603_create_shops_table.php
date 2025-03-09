@@ -12,14 +12,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('boutiques', function (Blueprint $table) {
+        Schema::create('shops', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('address');
+            $table->text('description')->nullable();
             $table->string('city');
             $table->decimal('latitude', 10, 8);
             $table->decimal('longitude', 10, 8);
-            $table->foreignIdFor(User::class)->nullable();
+            $table->foreignIdFor(User::class)->nullable()->constrained()->onDelete('set null');
+            $table->integer('state')->default(0);
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('boutiques');
+        Schema::dropIfExists('shops');
     }
 };

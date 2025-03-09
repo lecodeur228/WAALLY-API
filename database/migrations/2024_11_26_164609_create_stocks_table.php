@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Article;
-use App\Models\Boutique;
+use App\Models\Shop;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Article::class);
-            $table->foreignIdFor(Boutique::class);
+            $table->foreignIdFor(Shop::class);
             $table->decimal('quantite', 10, 2);
+            $table->integer('state')->default(0);
             $table->timestamps();
         });
     }

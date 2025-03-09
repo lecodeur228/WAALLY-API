@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(Magazin::class);
             $table->foreignIdFor(Article::class);
             $table->decimal('quantite', 10, 2);
+            $table->integer('state')->default(0);
             $table->timestamps();
         });
     }
