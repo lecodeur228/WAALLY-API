@@ -84,7 +84,6 @@ class CreateDefaultRolesAndPermissions extends Command
 
           // Assigner les permissions aux rôles
           $adminRole = Role::findByName('admin');
-<<<<<<< HEAD
           $adminRole->givePermissionTo(
             [
             //"manage boutique",
@@ -99,9 +98,6 @@ class CreateDefaultRolesAndPermissions extends Command
             'view owner',
             ]
         );
-=======
-          $adminRole->givePermissionTo(["manage shop","manage owner"]);
->>>>>>> 816cc18f2be4ce8a4f11e323feee9aa61966d17a
 
           $ownerRole = Role::findByName('owner');
           $ownerRole->givePermissionTo(
