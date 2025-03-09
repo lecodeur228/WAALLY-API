@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\Scopes\StateScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -26,7 +28,14 @@ class User extends Authenticatable
         'email',
         'phone',
         'password',
+        'fcm_token',
+        'user_id',
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new StateScope());
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -51,7 +60,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function boutique(){
+    public function shop(){
         return $this->hasMany(Shop::class);
     }
 

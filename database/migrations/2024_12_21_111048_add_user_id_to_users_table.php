@@ -12,16 +12,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shops', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->string('city');
-            $table->decimal('latitude', 10, 8);
-            $table->decimal('longitude', 10, 8);
+        Schema::table('users', function (Blueprint $table) {
             $table->foreignIdFor(User::class)->nullable()->constrained()->onDelete('set null');
-            $table->integer('state')->default(0);
-            $table->timestamps();
         });
     }
 
@@ -30,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shops');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 };

@@ -19,7 +19,12 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Store::class);
             $table->foreignIdFor(Article::class);
+<<<<<<< HEAD:database/migrations/2024_11_26_164508_create_inventorieses_table.php
             $table->decimal('quantity', 10, 2);
+=======
+            $table->decimal('quantite', 10, 2);
+            $table->integer('state')->default(0);
+>>>>>>> 816cc18f2be4ce8a4f11e323feee9aa61966d17a:database/migrations/2024_11_26_164508_create_inventaires_table.php
             $table->timestamps();
         });
     }

@@ -2,29 +2,40 @@
 
 namespace App\Repositories;
 
-use App\Models\Boutique;
+use App\Models\Shop;
 
 class ShopRepository
 {
     public function getShops()
     {
-        return Boutique::with(['user' => function($query) {
+        return Shop::with(['user' => function($query) {
             $query->select('id', 'name', 'email', 'phone');
-        }])->get(['id', 'name', 'address', 'created_at', 'updated_at']);
+        }])->get(['id', 'name', 'description', 'city', 'longitude', 'latitude', 'created_at', 'updated_at', 'user_id']);
     }
     public function store($data)
     {
-        return Boutique::create($data);
+        return Shop::create($data);
     }
 
     public function update($data, $id)
     {
-        return Boutique::where('id', $id)->update($data);
+        return Shop::where('id', $id)->update($data);
     }
 
     public function delete($id)
     {
-        return Boutique::where('id', $id)->delete();
+        return Shop::where('id', $id)->update(['state' => 1]);
     }
 
+
+    public function assignUserToShop($shopId, $userId)
+    {
+        $shop = Shop::find($shopId);
+        if ($shop) {
+            $shop->user_id = $userId;
+            $shop->save();
+            return $shop;
+        }
+        return null;
+    }
 }

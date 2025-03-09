@@ -12,9 +12,9 @@ class CreateDefaultRolesAndPermissions extends Command
      * The name and signature of the console command.
      *
      * @var string
-     */ 
+     */
     protected $signature = 'app:create-default-roles-and-permissions';
-    
+
     /**
      * The console command description.
      *
@@ -35,7 +35,7 @@ class CreateDefaultRolesAndPermissions extends Command
           // Définir les rôles et les permissions
           $roles = ['admin', 'owner', 'seller'];
           $permissions = [
-            //'manage boutique', 
+            //'manage boutique',
             'create shop',
             'update shop',
             'delete shop',
@@ -54,36 +54,37 @@ class CreateDefaultRolesAndPermissions extends Command
             'create articles',
             'update artcles',
             'delete articles',
-            'view articles', 
+            'view articles',
             //'manage finance',
             'create finance',
             'update finance',
             'delete finance',
-            'view finance', 
+            'view finance',
             //'manage stock',
             'create stock',
             'update stock',
             'delete stock',
-            'view stock', 
+            'view stock',
             //'manage ventes'
             'create sale',
             'update sale',
             'delete sale',
             'view sale'
         ];
-  
+
           // Créer les rôles
           foreach ($roles as $role) {
               Role::firstOrCreate(['name' => $role]);
           }
-  
+
           // Créer les permissions
           foreach ($permissions as $permission) {
               Permission::firstOrCreate(['name' => $permission]);
           }
-  
+
           // Assigner les permissions aux rôles
           $adminRole = Role::findByName('admin');
+<<<<<<< HEAD
           $adminRole->givePermissionTo(
             [
             //"manage boutique",
@@ -98,7 +99,10 @@ class CreateDefaultRolesAndPermissions extends Command
             'view owner',
             ]
         );
-  
+=======
+          $adminRole->givePermissionTo(["manage shop","manage owner"]);
+>>>>>>> 816cc18f2be4ce8a4f11e323feee9aa61966d17a
+
           $ownerRole = Role::findByName('owner');
           $ownerRole->givePermissionTo(
             [
@@ -106,17 +110,17 @@ class CreateDefaultRolesAndPermissions extends Command
             'create articles',
             'update artcles',
             'delete articles',
-            'view articles', 
+            'view articles',
             //'manage finance',
             'create finance',
             'update finance',
             'delete finance',
-            'view finance', 
+            'view finance',
             //'manage stock',
             'create stock',
             'update stock',
             'delete stock',
-            'view stock', 
+            'view stock',
             //'manage seller'
             'ceate seller',
             'update seller',
@@ -124,7 +128,7 @@ class CreateDefaultRolesAndPermissions extends Command
             'view seller',
             ]
         );
-  
+
           $sellerRole = Role::findByName('seller');
           $sellerRole->givePermissionTo(
             [
@@ -137,6 +141,6 @@ class CreateDefaultRolesAndPermissions extends Command
         );
 
           $this->info('Rôles et permissions créés avec succès.');
-  
+
     }
 }
