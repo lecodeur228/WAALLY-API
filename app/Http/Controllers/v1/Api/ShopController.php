@@ -21,8 +21,8 @@ class ShopController extends Controller
     public function getShops()
     {
          // Vérifier si l'utilisateur a la permission 'manage boutique'
-         if (!Auth::user()->can('manage boutique')) {
-            return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to manage boutiques.']);
+         if (!Auth::user()->can('view shop')) {
+            return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to view shop.']);
         }
         $response = $this->shopService->getShops();
 
@@ -32,15 +32,15 @@ class ShopController extends Controller
     public function store(Request $request)
     {
         // Vérifier si l'utilisateur a la permission 'manage boutique'
-        if (!Auth::user()->can('manage boutique')) {
-            return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to manage boutiques.']);
+        if (!Auth::user()->can('create shop')) {
+            return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to create shop.']);
         }
 
         // Valider les données de la requête
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
-            'phone' => 'required|string|max:255',
+            'phone' => 'required|string|max:255|max_digits:',
         ]);
 
         // Retourner les erreurs de validation si elles existent
@@ -58,8 +58,8 @@ class ShopController extends Controller
     public function update(Request $request, $id)
     {
         // Vérifier si l'utilisateur a la permission 'manage boutique'
-        if (!Auth::user()->can('manage boutique')) {
-            return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to manage boutiques.']);
+        if (!Auth::user()->can('update shop')) {
+            return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to update shop.']);
         }
 
         // Valider les données de la requête
@@ -84,8 +84,8 @@ class ShopController extends Controller
     public function delete($id)
     {
         // Vérifier si l'utilisateur a la permission 'manage boutique'
-        if (!Auth::user()->can('manage boutique')) {
-            return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to manage boutiques.']);
+        if (!Auth::user()->can('delete shop')) {
+            return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to delete shop.']);
         }
 
         $response = $this->shopService->delete($id);

@@ -97,7 +97,7 @@ class CreateDefaultRolesAndPermissions extends Command
             'delete owner',
             'view owner',
             ]
-        );
+          );
   
           $ownerRole = Role::findByName('owner');
           $ownerRole->givePermissionTo(
@@ -123,7 +123,7 @@ class CreateDefaultRolesAndPermissions extends Command
             'delete seller',
             'view seller',
             ]
-        );
+          );
   
           $sellerRole = Role::findByName('seller');
           $sellerRole->givePermissionTo(
@@ -134,7 +134,7 @@ class CreateDefaultRolesAndPermissions extends Command
             'delete sale',
             'view sale'
             ]
-        );
+          );
 
           $this->info('Rôles et permissions créés avec succès.');
   

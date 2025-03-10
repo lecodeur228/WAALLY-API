@@ -20,12 +20,13 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
-    public function clearregisterUser(Request $request)
+    public function registerUser(Request $request)
     {
         // Valider les données de la requête
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'account_type' => 'required|string',
             'password' => 'required|string|min:8',
         ]);
 
@@ -41,11 +42,10 @@ class UserController extends Controller
         $permission = 'manage' . $accountType->value;
 
         if (!Auth::user()->hasAnyPermission($permission)) {
-            return ApiResponse::error('You do not have permission to create this type of user.', 403);
+            return ApiResponse::error('You don\'t have permission to create this type of user.', 403);
         }
 
         // Créer l'utilisateur
-        // tu as fais une boucle recursive 
         $response = $this->userService->registerUser($validatedData,AccountType::from($validatedData['account_type']));
 
         return ApiResponse::success('User created successfully', 201, $response);

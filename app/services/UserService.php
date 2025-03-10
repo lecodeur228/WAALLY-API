@@ -22,6 +22,4 @@ class UserService {
     {
         return $this->userRepository->login($request);
     }
-
-
 }
