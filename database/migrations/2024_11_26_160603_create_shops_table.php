@@ -15,11 +15,12 @@ return new class extends Migration
         Schema::create('shops', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('address');
+            $table->text('description')->nullable();
             $table->string('city');
             $table->decimal('latitude', 10, 8);
             $table->decimal('longitude', 10, 8);
-            $table->foreignIdFor(User::class)->nullable();
+            $table->foreignIdFor(User::class)->nullable()->constrained()->onDelete('set null');
+            $table->integer('state')->default(0);
             $table->timestamps();
         });
     }

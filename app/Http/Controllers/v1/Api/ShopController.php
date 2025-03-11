@@ -4,6 +4,7 @@ namespace App\Http\Controllers\v1\Api;
 
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Models\Shop;
 use App\Services\ShopService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -29,18 +30,46 @@ class ShopController extends Controller
         return ApiResponse::success($response,'Shops retrieved successfully',200);
     }
 
+    public function getArticles(Shop $shopId){
+        // Vérifier su l'utilisateur a la parmission 'views articles'
+        if (!Auth::user()->can('view shop')) {
+            return ApiResponse::error('Unauthorized', 403,'You do not have permission to view article.');
+        }
+        
+        $response = $this->shopService->getArticles($shopId);
+
+        return ApiResponse::success($response , 'Artciles retrieved successfully' , 200);
+    }
+
+    public function getMagazins(Shop $shopId){
+        // Vérifier su l'utilisateur a la parmission 'views articles'
+        if (!Auth::user()->can('view shop')) {
+            return ApiResponse::error('Unauthorized', 403,'You do not have permission to view magazins.');
+        }
+        
+        $response = $this->shopService->getMagazins($shopId);
+
+        return ApiResponse::success($response , 'Magazins retrieved successfully' , 200);
+    }
+
     public function store(Request $request)
     {
+        // dd($request);
         // Vérifier si l'utilisateur a la permission 'manage boutique'
         if (!Auth::user()->can('create shop')) {
             return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to create shop.']);
         }
-
+        // dd($request);
         // Valider les données de la requête
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'phone' => 'required|string|max:255|max_digits:',
+            'description' => 'required|string',
+            'city' => 'required|string',
+            'latitude' => 'required|string',
+            'longitude' => 'required|string',
+            'user_id' => 'nullable|integer',
         ]);
 
         // Retourner les erreurs de validation si elles existent
@@ -52,22 +81,27 @@ class ShopController extends Controller
 
         $response = $this->shopService->store($validatedData);
 
-        return ApiResponse::success($response,'Shop created successfully',201);
+        return ApiResponse::success($response,'Shop created successfully',200);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Shop $shopId)
     {
         // Vérifier si l'utilisateur a la permission 'manage boutique'
         if (!Auth::user()->can('update shop')) {
             return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to update shop.']);
         }
-
+       
         // Valider les données de la requête
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'phone' => 'required|string|max:255',
+            'description' => 'required|string',
+            'city' => 'required|string',
+            'latitude' => 'required|string',
+            'longitude' => 'required|string',
+            'user_id' => 'required|integer|exists:users,id',
         ]);
+
+        // dd($validator);  
 
         // Retourner les erreurs de validation si elles existent
         if ($validator->fails()) {
@@ -76,21 +110,50 @@ class ShopController extends Controller
 
         $validatedData = $validator->validated();
 
-        $response = $this->shopService->update($validatedData, $id);
+        $response = $this->shopService->update($validatedData, $shopId);
 
         return ApiResponse::success($response,'Shop updated successfully',200);
     }
 
-    public function delete($id)
+    public function delete(Shop $shopId)
     {
         // Vérifier si l'utilisateur a la permission 'manage boutique'
         if (!Auth::user()->can('delete shop')) {
             return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to delete shop.']);
         }
 
-        $response = $this->shopService->delete($id);
+        $response = $this->shopService->delete($shopId);
 
         return ApiResponse::success($response,'Shop deleted successfully',200);
+    }
+
+    public function assignUserToShop(Request $request, Shop $shopId)
+    {
+
+          // Vérifier si l'utilisateur a la permission 'manage boutique'
+          if (!Auth::user()->can('update shop')) {
+            return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to update shop.']);
+        }
+       
+        // Valider les données de la requête
+        $validator = Validator::make($request->all(), [
+           
+            'user_id' => 'required|integer|exists:users,id',
+        ]);
+
+         // Retourner les erreurs de validation si elles existent
+         if ($validator->fails()) {
+            return ApiResponse::error('Validation error', 422, $validator->errors());
+        }
+
+        $userId = $request->input('user_id');
+        $shop = $this->shopService->assignUserToShop($shopId, $userId);
+
+        if ($shop) {
+            return ApiResponse::success($shop,'User assigned to shop successfully', 200);
+        }
+
+        return ApiResponse::error('Shop not found', 404);
     }
 
 }

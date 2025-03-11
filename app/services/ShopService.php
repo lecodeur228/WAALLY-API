@@ -17,6 +17,16 @@ class ShopService
         return $this->shopRepository->getShops();
     }
 
+    public function getArticles($id){
+        return $this->shopRepository->getArticles($id);
+    }
+
+    public function getMagazins($id) {
+        
+        return $this->shopRepository->getMagazins($id);
+
+    }
+
     public function store($data)
     {
         return $this->shopRepository->store($data);
@@ -30,5 +40,10 @@ class ShopService
     public function delete($id)
     {
         return $this->shopRepository->delete($id);
+    }
+
+    public function assignUserToShop($shopId, $userId)
+    {
+        return $this->shopRepository->assignUserToShop($shopId, $userId);
     }
 }

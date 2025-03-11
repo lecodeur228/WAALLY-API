@@ -10,20 +10,21 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+
 Route::middleware('ApiKeyVerify')->prefix('v1')->group(function(){
     Route::controller(UserController::class)->prefix('users')->group(function(){
         Route::post('register', 'registerUser');
         Route::post('login','login');
+
     });
-});
 
-Route::prefix('v1')->controller(ShopController::class)->group(function () {
-    Route::get('/shops','getShops');
-    Route::post('/shops/create','store');
-    Route::post('/shops/update/{id}','update');
-    Route::delete('/shops/delete/{id}','delete');
-});
-
-Route::prefix('v1')->controller()->groupe(function(){
-    
+    Route::prefix('shops')->controller(ShopController::class)->group(function () {
+        Route::get('/','getShops');
+        Route::get('/articles','getArticles');
+        Route::get('/magazins','getMagazins');
+        Route::post('/create','store');
+        Route::post('/assignedShop/{shopId}','assignUserToShop');
+        Route::post('/update/{id}','update');
+        Route::delete('/delete/{id}','delete');
+    });
 });

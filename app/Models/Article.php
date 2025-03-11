@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\StateScope;
 use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
-    protected $fillable = ["name","description","prix_vente","prix_achat","boutique_id"];
+    protected $fillable = ["name","description","sale_price","buy_price","shop_id"];
 
-    public function boutique(){
+    protected static function booted()
+    {
+        static::addGlobalScope(new StateScope());
+    }
+    public function shop(){
         return $this->belongsTo(Shop::class);
     }
 

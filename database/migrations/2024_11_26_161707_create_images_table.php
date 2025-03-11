@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('image_path');
             $table->foreignIdFor(Article::class);
+            $table->integer('state')->default(0);
             $table->timestamps();
         });
     }

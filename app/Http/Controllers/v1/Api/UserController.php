@@ -8,7 +8,6 @@ use App\Services\UserService;
 use App\Enums\AccountType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Spatie\Permission\Exceptions\UnauthorizedException;
 use App\Helpers\ApiResponse;
 
 class UserController extends Controller
@@ -26,8 +25,10 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'account_type' => 'required|string',
+            'account_type' => 'required|string|in:admin,owner,seller',
             'password' => 'required|string|min:8',
+            'account_type' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
         ]);
 
         // Retourner les erreurs de validation si elles existent
@@ -37,18 +38,18 @@ class UserController extends Controller
 
         $validatedData = $validator->validated();
 
+
         // Vérifier les permissions en fonction du type de compte
         $accountType = AccountType::from($validatedData['account_type']);
-        $permission = 'manage' . $accountType->value;
+        $permission = 'manage ' . $accountType->value;
 
         if (!Auth::user()->hasAnyPermission($permission)) {
             return ApiResponse::error('You don\'t have permission to create this type of user.', 403);
         }
-
         // Créer l'utilisateur
         $response = $this->userService->registerUser($validatedData,AccountType::from($validatedData['account_type']));
 
-        return ApiResponse::success('User created successfully', 201, $response);
+        return ApiResponse::success( $response,'User created successfully', 201);
     }
 
 

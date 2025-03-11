@@ -14,6 +14,7 @@ class UserRepository {
 
     public function register(array $data, AccountType $accountType) {
         
+        
         // Créer l'utilisateur
         $user = User::create([
             'name' => $data["name"],
@@ -25,7 +26,7 @@ class UserRepository {
         // Assigner le rôle à l'utilisateur
         $user->assignRole($accountType->value);
 
-        return ApiResponse::success('User created successfully', 201, $user);
+        return ApiResponse::success($user,'User created successfully', 201);
     }
 
     public function login(array $data){
