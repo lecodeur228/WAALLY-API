@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\v1\Api;
 
-use App\Helpers\ApiResponse;
+use App\helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Shop;
-use App\Services\ShopService;
+use App\services\ShopService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Twilio\Rest\Iam\V1\ApiKeyPage;
 
 class ShopController extends Controller
 {
@@ -30,7 +31,7 @@ class ShopController extends Controller
         return ApiResponse::success($response,'Shops retrieved successfully',200);
     }
 
-    public function getArticles(Shop $shopId){
+    public function getArticles($shopId){
         // Vérifier su l'utilisateur a la parmission 'views articles'
         if (!Auth::user()->can('view shop')) {
             return ApiResponse::error('Unauthorized', 403,'You do not have permission to view article.');
@@ -41,7 +42,7 @@ class ShopController extends Controller
         return ApiResponse::success($response , 'Artciles retrieved successfully' , 200);
     }
 
-    public function getMagazins(Shop $shopId){
+    public function getMagazins($shopId){
         // Vérifier su l'utilisateur a la parmission 'views articles'
         if (!Auth::user()->can('view shop')) {
             return ApiResponse::error('Unauthorized', 403,'You do not have permission to view magazins.');
@@ -63,13 +64,10 @@ class ShopController extends Controller
         // Valider les données de la requête
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'phone' => 'required|string|max:255|max_digits:',
             'description' => 'required|string',
             'city' => 'required|string',
             'latitude' => 'required|string',
             'longitude' => 'required|string',
-            'user_id' => 'nullable|integer',
         ]);
 
         // Retourner les erreurs de validation si elles existent
@@ -78,13 +76,14 @@ class ShopController extends Controller
         }
 
         $validatedData = $validator->validated();
-
+        
+        $validatedData['user_id'] = Auth::user()->id;
         $response = $this->shopService->store($validatedData);
 
         return ApiResponse::success($response,'Shop created successfully',200);
     }
 
-    public function update(Request $request, Shop $shopId)
+    public function update(Request $request,$shopId)
     {
         // Vérifier si l'utilisateur a la permission 'manage boutique'
         if (!Auth::user()->can('update shop')) {
@@ -98,7 +97,6 @@ class ShopController extends Controller
             'city' => 'required|string',
             'latitude' => 'required|string',
             'longitude' => 'required|string',
-            'user_id' => 'required|integer|exists:users,id',
         ]);
 
         // dd($validator);  
@@ -110,12 +108,16 @@ class ShopController extends Controller
 
         $validatedData = $validator->validated();
 
+        $validatedData['user_id'] = Auth::user()->id;
         $response = $this->shopService->update($validatedData, $shopId);
+        if(!$response){
+            return ApiResponse::error('Modification impossible' , 400);
+        }
 
         return ApiResponse::success($response,'Shop updated successfully',200);
     }
 
-    public function delete(Shop $shopId)
+    public function delete($shopId)
     {
         // Vérifier si l'utilisateur a la permission 'manage boutique'
         if (!Auth::user()->can('delete shop')) {
@@ -127,7 +129,7 @@ class ShopController extends Controller
         return ApiResponse::success($response,'Shop deleted successfully',200);
     }
 
-    public function assignUserToShop(Request $request, Shop $shopId)
+    /**public function assignUserToShop(Request $request, Shop $shopId)
     {
 
           // Vérifier si l'utilisateur a la permission 'manage boutique'
@@ -154,6 +156,6 @@ class ShopController extends Controller
         }
 
         return ApiResponse::error('Shop not found', 404);
-    }
+    }**/
 
 }

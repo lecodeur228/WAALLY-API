@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->foreignIdFor(Shop::class);
+            $table->boolean('state')->default(0);
             $table->timestamps();
         });
     }

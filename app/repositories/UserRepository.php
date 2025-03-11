@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Repositories;
+namespace App\repositories;
 
 use App\Enums\AccountType;
-use App\Helpers\ApiResponse;
+use App\helpers\ApiResponse;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Spatie\Permission\Models\Role;
 
 class UserRepository {
 
@@ -36,8 +34,11 @@ class UserRepository {
                     ->orWhere('phone', $data['email_or_phone'])
                     ->first();
 
-        if (!$user || !Hash::check($data['password'], $user->password)) {
-            return ApiResponse::error('Invalid credentials', 401);
+        if (!$user) {
+            return [
+                'status' => false,
+                'message' => 'Invalid credentials'
+            ];
         }
 
         // Authentifier l'utilisateur
@@ -63,6 +64,8 @@ class UserRepository {
             'updated_at',
         ]);
         return  [
+            'status' => true,
+            'message' => 'Login succesfully',
             'user' => $userInfo,
             'role' => $role,
             'permissions' => $permissions,

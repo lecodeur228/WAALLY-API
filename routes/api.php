@@ -12,27 +12,29 @@ Route::get('/user', function (Request $request) {
 
 
 Route::middleware('ApiKeyVerify')->prefix('v1')->group(function(){
+
     Route::controller(UserController::class)->prefix('users')->group(function(){
         Route::post('register', 'registerUser');
         Route::post('login','login');
-
     });
 
-    Route::prefix('shops')->controller(ShopController::class)->group(function () {
-        Route::get('/','getShops');
-        Route::get('/articles','getArticles');
-        Route::get('/magazins','getMagazins');
-        Route::post('/create','store');
-        Route::post('/assignedShop/{shopId}','assignUserToShop');
-        Route::post('/update/{id}','update');
-        Route::delete('/delete/{id}','delete');
-    });
-
-    Route::prefix('articles')->controller(ArticleController::class)->group(function(){
-        Route::get('/{shopId}','getArticles');
-        Route::get('/shop','getShop');
-        Route::post('/create/{shopId}','store');
-        Route::post('/update/{shopId}','id');
-        Route::delete('delete/{id}', 'delete');
+    Route::middleware('auth:sanctum')->group(function (){
+        Route::prefix('shops')->controller(ShopController::class)->group(function () {
+            Route::get('/','getShops');
+            Route::get('/articles/{shopId}','getArticles');
+            Route::get('/magazins/{shopId}','getMagazins');
+            Route::post('/create','store');
+            Route::put('/update/{shopId}','update');
+            //Route::post('/assignedShop/{shopId}','assignUserToShop');
+            Route::post('/delete/{shopId}','delete');
+        });
+    
+        Route::prefix('articles')->controller(ArticleController::class)->group(function(){
+            Route::get('/{shopId}','getArticles');
+            Route::get('/shop','getShop');
+            Route::post('/create/{shopId}','store');
+            Route::post('/update/{shopId}','id');
+            Route::delete('delete/{id}', 'delete');
+        });
     });
 });

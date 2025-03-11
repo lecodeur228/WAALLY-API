@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\services;
 
-use App\Repositories\ShopRepository;
+use App\repositories\ShopRepository;
 
 class ShopService
 {
