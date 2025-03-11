@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\V1\Api\ArticleController;
 use App\Http\Controllers\v1\Api\ShopController;
 use App\Http\Controllers\v1\Api\UserController;
-use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,5 +26,13 @@ Route::middleware('ApiKeyVerify')->prefix('v1')->group(function(){
         Route::post('/assignedShop/{shopId}','assignUserToShop');
         Route::post('/update/{id}','update');
         Route::delete('/delete/{id}','delete');
+    });
+
+    Route::prefix('articles')->controller(ArticleController::class)->group(function(){
+        Route::get('/{shopId}','getArticles');
+        Route::get('/shop','getShop');
+        Route::post('/create/{shopId}','store');
+        Route::post('/update/{shopId}','id');
+        Route::delete('delete/{id}', 'delete');
     });
 });

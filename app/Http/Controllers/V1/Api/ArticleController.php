@@ -21,7 +21,7 @@ class ArticleController extends Controller
         $this->articleService = $articleService;
     }
 
-    public function getArticles(Shop $shop_id){
+    public function getArticles(Shop $shopId){
         
         // Vérifier si l'utilisateur a la permission de 'view article'
 
@@ -29,7 +29,7 @@ class ArticleController extends Controller
             return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to view articles.');
         }
 
-        $response = $this->articleService->getArticles($shop_id);
+        $response = $this->articleService->getArticles($shopId);
 
         return ApiResponse::success($response , 'Articles retrieved successfully' , 200);
     }
@@ -47,7 +47,7 @@ class ArticleController extends Controller
         return ApiResponse::success($response , 'Shop retrieved successfully' , 200);
     }
 
-    public function store(Request $request , Shop $shop_id){
+    public function store(Request $request , Shop $shopId){
          
         // Vérifier si l'utilisateur a la permision 'create Artciles'
         if(!Auth::user()->can('create articles')){
@@ -73,7 +73,7 @@ class ArticleController extends Controller
         $validatedData = $validator->validated();
 
         // Ajouter l'id du shop
-        $validatedData["shop_id"] = $shop_id;
+        $validatedData["shop_id"] = $shopId;
 
         $response = $this->articleService->store($validatedData);
 
@@ -81,7 +81,7 @@ class ArticleController extends Controller
 
     }
 
-    public function update(Request $request ,Shop $shop_id , Article $id){
+    public function update(Request $request ,Shop $shopId , Article $id){
          // Vérifier si l'utilisateur a la permision 'update Artciles'
          if(!Auth::user()->can('update articles')){
             return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to update articles.');
@@ -107,7 +107,7 @@ class ArticleController extends Controller
 
         // ajouter l'id  du shop
 
-        $validatedData['shop_id'] = $shop_id;
+        $validatedData['shop_id'] = $shopId;
 
         $response = $this->articleService->update($validatedData , $id);
 
