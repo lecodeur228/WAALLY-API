@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\services;
 
-use App\Repositories\ShopRepository;
+use App\repositories\ShopRepository;
 
 class ShopService
 {
@@ -15,6 +15,16 @@ class ShopService
     public function getShops()
     {
         return $this->shopRepository->getShops();
+    }
+
+    public function getArticles($id){
+        return $this->shopRepository->getArticles($id);
+    }
+
+    public function getMagazins($id) {
+        
+        return $this->shopRepository->getMagazins($id);
+
     }
 
     public function store($data)

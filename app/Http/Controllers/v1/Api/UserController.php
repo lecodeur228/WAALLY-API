@@ -4,11 +4,11 @@ namespace App\Http\Controllers\v1\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\UserService;
-use App\Enums\AccountType;
-use Illuminate\Support\Facades\Auth;
+use App\enums\AccountType;
+//use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\Helpers\ApiResponse;
+use App\helpers\ApiResponse;
+use App\services\UserService;
 
 class UserController extends Controller
 {
@@ -43,17 +43,12 @@ class UserController extends Controller
         $accountType = AccountType::from($validatedData['account_type']);
         $permission = 'manage ' . $accountType->value;
 
-        if (!Auth::user()->hasAnyPermission($permission)) {
-            return ApiResponse::error('You do not have permission to create this type of user.', 403);
-        }
-
-
-
+        /**if (!Auth::user()->hasAnyPermission($permission)) {
+            return ApiResponse::error('You don\'t have permission to create this type of user.', 403);
+        }**/
         // Créer l'utilisateur
-        // tu as fais une boucle recursive
         $response = $this->userService->registerUser($validatedData,AccountType::from($validatedData['account_type']));
-
-        return ApiResponse::success( $response,'User created successfully', 201);
+        return ApiResponse::success($response,'User created successfully', 201);
     }
 
 
@@ -74,9 +69,11 @@ class UserController extends Controller
 
         // Authentifier l'utilisateur
         $response = $this->userService->loginUser($credentials);
-        // dd($response);
 
-        return ApiResponse::success($response,'Login successful',200 );
+        if($response['status']){
+           return ApiResponse::success($response,'Login successful',200 );
+        }
 
+        return ApiResponse::error($response['message'], 401);
     }
 }

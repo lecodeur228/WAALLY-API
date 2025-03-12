@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
-    protected $fillable = ["name","description","prix_vente","prix_achat","boutique_id"];
+    protected $fillable = ["name","description","sale_price","buy_price","shop_id"];
 
     protected static function booted()
     {

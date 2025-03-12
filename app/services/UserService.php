@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\services;
 
 use App\Enums\AccountType;
-use App\Repositories\UserRepository;
+use App\repositories\UserRepository;
 
 class UserService {
 
@@ -22,6 +22,4 @@ class UserService {
     {
         return $this->userRepository->login($request);
     }
-
-
 }
