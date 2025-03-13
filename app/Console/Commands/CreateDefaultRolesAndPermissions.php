@@ -52,7 +52,7 @@ class CreateDefaultRolesAndPermissions extends Command
             'view seller',
             //'manage articles',
             'create articles',
-            'update artcles',
+            'update articles',
             'delete articles',
             'view articles',
             //'manage finance',
@@ -104,7 +104,7 @@ class CreateDefaultRolesAndPermissions extends Command
             [
             //'manage articles',
             'create articles',
-            'update artcles',
+            'update articles',
             'delete articles',
             'view articles',
             //'manage finance',

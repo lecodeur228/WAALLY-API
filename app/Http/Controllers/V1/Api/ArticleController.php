@@ -2,26 +2,25 @@
 
 namespace App\Http\Controllers\V1\Api;
 
-use App\Helpers\ApiResponse;
+use App\helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Shop;
-use App\Services\ArticleService;
+use App\services\ArticlesService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Twilio\Rest\Api;
 
 class ArticleController extends Controller
 {
     protected $articleService;
 
-    public function __construct(ArticleService $articleService)
+    public function __construct(ArticlesService $articleService)
     {
         $this->articleService = $articleService;
     }
 
-    public function getArticles(Shop $shopId){
+    public function getArticles($shopId){
         
         // Vérifier si l'utilisateur a la permission de 'view article'
 
@@ -34,7 +33,7 @@ class ArticleController extends Controller
         return ApiResponse::success($response , 'Articles retrieved successfully' , 200);
     }
 
-    public function getShop(){
+    public function getShop($id){
 
         // Vérifier si l'utilisateur a la permission de 'view article'
 
@@ -42,12 +41,12 @@ class ArticleController extends Controller
             return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to view shop.');
         }
 
-        $response = $this->articleService->getShop();
+        $response = $this->articleService->getShop($id);
 
         return ApiResponse::success($response , 'Shop retrieved successfully' , 200);
     }
 
-    public function store(Request $request , Shop $shopId){
+    public function store(Request $request ,$shopId){
          
         // Vérifier si l'utilisateur a la permision 'create Artciles'
         if(!Auth::user()->can('create articles')){
@@ -61,7 +60,7 @@ class ArticleController extends Controller
             "name"=> 'required|string|max:255',
             "description" => 'required|string|max:255',
             "sale_price" => 'required|numeric|max_digits:10|min_digits:2',
-            "bye_price" => 'required|numeric|max_digits:10|min_digits:2',
+            "buy_price" => 'required|numeric|max_digits:10|min_digits:2',
         ]);
 
         // Retourner les erreurs de validation si elles existent 
@@ -81,7 +80,7 @@ class ArticleController extends Controller
 
     }
 
-    public function update(Request $request ,Shop $shopId , Article $id){
+    public function update(Request $request ,$shopId , $id){
          // Vérifier si l'utilisateur a la permision 'update Artciles'
          if(!Auth::user()->can('update articles')){
             return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to update articles.');
@@ -94,7 +93,7 @@ class ArticleController extends Controller
             "name"=> 'required|string|max:255',
             "description" => 'required|string|max:255',
             "sale_price" => 'required|numeric|max_digits:10|min_digits:2',
-            "bye_price" => 'required|numeric|max_digits:10|min_digits:2',
+            "buy_price" => 'required|numeric|max_digits:10|min_digits:2',
         ]);
 
         // Retourner les erreurs de validation si elles existent 
@@ -115,15 +114,20 @@ class ArticleController extends Controller
 
     }
 
-    public function delete(Article $id)
+    public function delete($shopId , $articelId)
     {
         // Vérifier si l'utilisateur a la permission 'delete article'
         if (!Auth::user()->can('delete articles')) {
             return ApiResponse::error('Unauthorized', 403, 'You do not have permission to delete Article.');
         }
 
-        $response = $this->articleService->delete($id);
+        $response = $this->articleService->delete($shopId , $articelId);
 
-        return ApiResponse::success($response,'Article deleted successfully',200);
+        if($response != null){
+
+            return ApiResponse::success($response,'Article deleted successfully',200);
+        }
+        return ApiResponse::error("The Shop do not exist" , 400);
+        
     }
 }

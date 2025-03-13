@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\services;
 
-use App\Repositories\ArticleRepository;
+use App\repositories\ArticleRepository;
 
-class ArticleService {
+class ArticlesService {
     
     protected $articleRepository;
 
@@ -19,9 +19,9 @@ class ArticleService {
 
     }
 
-    public function getShop(){
+    public function getShop($id){
 
-        return $this->articleRepository->getShop();
+        return $this->articleRepository->getShop($id);
         
     }
 
@@ -37,9 +37,9 @@ class ArticleService {
 
     }
 
-    public function delete($id){
+    public function delete($shopId , $id){
 
-        return $this->articleRepository->delete($id);
+        return $this->articleRepository->delete($shopId , $id);
 
     }
 }
