@@ -4,7 +4,7 @@ namespace App\services;
 
 use App\repositories\ArticleRepository;
 
-class ArticlesService {
+class ArticleService {
     
     protected $articleRepository;
 

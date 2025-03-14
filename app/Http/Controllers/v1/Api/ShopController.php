@@ -22,8 +22,8 @@ class ShopController extends Controller
 
     public function getShops()
     {
-         // Vérifier si l'utilisateur a la permission 'manage boutique'
-         if (!Auth::user()->can('view shop')) {
+        // Vérifier si l'utilisateur a la permission 'view shop'
+        if (!Auth::user()->can('view shop')) {
             return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to view shop.']);
         }
         $response = $this->shopService->getShops();
@@ -32,7 +32,7 @@ class ShopController extends Controller
     }
 
     public function getArticles($shopId){
-        // Vérifier su l'utilisateur a la parmission 'views articles'
+        // Vérifier si l'utilisateur a la parmission 'view articles'
         if (!Auth::user()->can('view shop')) {
             return ApiResponse::error('Unauthorized', 403,'You do not have permission to view article.');
         }
@@ -56,7 +56,7 @@ class ShopController extends Controller
     public function store(Request $request)
     {
         // dd($request);
-        // Vérifier si l'utilisateur a la permission 'manage boutique'
+        // Vérifier si l'utilisateur a la permission 'create shop'
         if (!Auth::user()->can('create shop')) {
             return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to create shop.']);
         }

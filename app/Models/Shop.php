@@ -26,11 +26,11 @@ class Shop extends Model
         return $this->belongsToMany(Article::class);
     }
 
-    public function magazins(){
-        return $this->hasMany(Store::class);
-    }
-
     public function stocks(){
         return $this->hasMany(Stock::class);
+    }
+
+    public function stores() {
+        return $this->belongsToMany(Store::class);
     }
 }

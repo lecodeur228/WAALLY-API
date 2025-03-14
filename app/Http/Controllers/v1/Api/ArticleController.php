@@ -6,7 +6,7 @@ use App\helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Shop;
-use App\services\ArticlesService;
+use App\services\ArticleService;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +16,7 @@ class ArticleController extends Controller
 {
     protected $articleService;
 
-    public function __construct(ArticlesService $articleService)
+    public function __construct(Articleservice $articleService)
     {
         $this->articleService = $articleService;
     }

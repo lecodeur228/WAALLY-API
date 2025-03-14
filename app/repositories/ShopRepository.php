@@ -20,7 +20,7 @@ class ShopRepository
 
     public function getMagazins($id){
         $shop = Shop::find($id);
-        return $shop->magazins;   
+        return $shop->stores;   
     }
     
     public function store($data)
