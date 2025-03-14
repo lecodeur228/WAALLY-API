@@ -32,7 +32,7 @@ Route::middleware('ApiKeyVerify')->prefix('v1')->group(function(){
         Route::prefix('articles')->controller(ArticleController::class)->group(function(){
             Route::get('/{shopId}','getArticles'); /** good */
             Route::get('{ShopId}/shop','getShop'); /** good */
-            Route::post('/create/{shopId}','store'); /** good */
+            Route::post('/create','store'); /** good */
             Route::post('/update/{shopId}/{articleId}','update'); /** good */
             Route::post('delete/{shopId}/{articleId}','delete'); /** good */
         });

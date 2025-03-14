@@ -25,9 +25,9 @@ class ArticlesService {
         
     }
 
-    public function store($data) {
+    public function store($data , $shopIds) {
         
-        return $this->articleRepository->store($data);
+        return $this->articleRepository->store($data,$shopIds);
 
     }
 

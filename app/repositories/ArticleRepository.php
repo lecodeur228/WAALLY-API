@@ -8,20 +8,24 @@ use App\Models\Shop;
 class ArticleRepository{
 
     public function getArticles($id){
-
-        return Article::where("shop_id" , $id)->get();
+        $shop = Shop::find($id);
+        return $shop->articles;
 
     }
 
     public function getShop($id){   
 
         $article = Article::find($id);
-        return $article->shop;
+        return $article->shops;
     }
 
-    public function store($data){
-
-        return Article::create($data);
+    public function store($data , $shopIds){
+        $article = Article::create($data);
+        foreach($shopIds as $shopId){
+            $article->shops()->attach($shopId);
+            $response[$shopId] = $article;
+        }
+        return $response;
 
     }
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Shop;
 use App\services\ArticlesService;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -46,7 +47,7 @@ class ArticleController extends Controller
         return ApiResponse::success($response , 'Shop retrieved successfully' , 200);
     }
 
-    public function store(Request $request ,$shopId){
+    public function store(Request $request){
          
         // Vérifier si l'utilisateur a la permision 'create Artciles'
         if(!Auth::user()->can('create articles')){
@@ -61,6 +62,8 @@ class ArticleController extends Controller
             "description" => 'required|string|max:255',
             "sale_price" => 'required|numeric|max_digits:10|min_digits:2',
             "buy_price" => 'required|numeric|max_digits:10|min_digits:2',
+            "shop_id" => 'required|array|min:1',
+            "shop_id.*" => 'required|integer|exists:shops,id'
         ]);
 
         // Retourner les erreurs de validation si elles existent 
@@ -72,9 +75,16 @@ class ArticleController extends Controller
         $validatedData = $validator->validated();
 
         // Ajouter l'id du shop
-        $validatedData["shop_id"] = $shopId;
+        //$validatedData["shop_id"] = $shopId;
 
-        $response = $this->articleService->store($validatedData);
+        $validatedDataWithoutShop['name'] = $validatedData['name'];
+        $validatedDataWithoutShop['description'] = $validatedData['description'];
+        $validatedDataWithoutShop['sale_price'] = $validatedData['sale_price'];
+        $validatedDataWithoutShop['buy_price'] = $validatedData['buy_price'];
+
+        $shopIds = $validatedData['shop_id'];
+
+        $response = $this->articleService->store($validatedDataWithoutShop , $shopIds);
 
         return ApiResponse::success($response , 'Article created succesfully ' , 200);
 
