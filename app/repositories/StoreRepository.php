@@ -12,10 +12,24 @@ class StoreRepository
         return Store::all();
     }
 
-    public function getShops($storeId)
+    public function getRelatedShops($storeId)
     {
         $store = Store::find($storeId);
         return $store->shops;
+    }
+
+    public function getUnrelatedShops($storeId){
+
+        $store = Store::find($storeId);
+
+        // Récupérer les IDs des magazins liés à l'article
+        $relatedShopIds = $store->shops()->pluck('shop_id');
+
+        // Récupérer les magazins qui ne sont pas liés à l'article
+        $unrelatedShops = Shop::whereNotIn('id', $relatedShopIds)->get();
+
+        return $unrelatedShops;
+
     }
 
     public function store($data, $shopIds)
@@ -26,6 +40,28 @@ class StoreRepository
             $response[$shopId] = $store;
         }
         return $response;
+    }
+
+    public function addShops($storeId, $shopIds)
+    {
+        $store = Store::find($storeId);
+
+        // Ajoute uniquement les nouvelles associations sans dupliquer les existantes
+        $store->shops()->syncWithoutDetaching($shopIds);
+
+        // Retourne les magazins associés
+        return Shop::whereIn('id', $shopIds)->get();
+        
+    }
+
+    public function removeShops($storeId, $shopIds)
+    {
+        $store = Store::find($storeId);
+        // Détacher l'article de plusieurs shops en une seule requête
+        $store->shops()->detach($shopIds);
+        $resposne = $store->shops;
+
+        return $resposne;
     }
 
     public function update($data, $id)

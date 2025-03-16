@@ -24,10 +24,13 @@ Route::middleware('ApiKeyVerify')->prefix('v1')->group(function(){
             Route::get('/','getShops'); /** good */
             Route::get('/relatedArticles/{shopId}','getRelatedArticles'); /** good */
             Route::get('/unrelatedArticles/{shopId}','getUnrelatedArticles'); /** good */
-            Route::get('/stores/{shopId}','getStores'); /** good */
+            Route::get('/relatedStores/{shopId}','getRelatedStores'); /** good */
+            Route::get("/unrelatedStores/{shopId}",'getUnrelatedStores'); /** good */
             Route::post('/create','store'); /** good */
             Route::post('/addArticles/{shopId}','addArticles'); /** petit problème avec l'article d'id 1 */
             Route::post('/removeArticles/{shopId}','removeArticles'); /** good */
+            Route::post("/addStores/{shopId}",'addStores'); 
+            Route::post('/removeStores/{shopId}','removeStores'); 
             Route::put('/update/{shopId}','update'); /** good */
             Route::post('/delete/{shopId}','delete'); /** good */
         });
@@ -45,7 +48,10 @@ Route::middleware('ApiKeyVerify')->prefix('v1')->group(function(){
 
         Route::prefix('stores')->controller(StoreController::class)->group(function(){  
             Route::get('/','getStores'); /** good */
-            Route::get('/{storeId}/shops','getShops'); /** good */
+            Route::get('/relatedShops/{storeId}','getRelatedShops'); /** good */
+            Route::get('/unrelatedShops/{storeId}','getUnrelatedShops'); /** good */
+            Route::post('/addShops/{storeId}','addShops'); /** good */
+            Route::post('/removeShops/{storeId}','removeShops'); /** good */
             Route::post('/create','store'); /** good */
             Route::post('/update/{storeId}','update'); /** good */
             Route::post('delete/{storeId}','delete'); /** good */

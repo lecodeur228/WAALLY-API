@@ -27,9 +27,15 @@ class ShopService
         
     }
 
-    public function getStores($id) {
+    public function getRelatedStores($id) {
         
-        return $this->shopRepository->getStores($id);
+        return $this->shopRepository->getRelatedStores($id);
+
+    }
+
+    public function getUnrelatedStores($shopId){
+
+        return $this->shopRepository->getUnrelatedStores($shopId);
 
     }
 
@@ -42,9 +48,19 @@ class ShopService
         return $this->shopRepository->addArticles($articleIds, $shopId);
     }
 
+    public function addStores($shopId, $storeIds)
+    {
+        return $this->shopRepository->addStores($shopId, $storeIds);
+    }
+
     public function removeArticles($shopId, $articleIds)
     {
         return $this->shopRepository->removeArticles($shopId, $articleIds);
+    }
+
+    public function removeStores($shopId, $storeIds)
+    {
+        return $this->shopRepository->removeStores($shopId, $storeIds);
     }
 
     public function update($data, $id)

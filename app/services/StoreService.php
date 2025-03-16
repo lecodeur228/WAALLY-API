@@ -18,14 +18,30 @@ class StoreService
         return $this->storeRepository->getStores();
     }
 
-    public function getShops($storeId)
+    public function getRelatedShops($storeId)
     {
-        return $this->storeRepository->getShops($storeId);
+        return $this->storeRepository->getRelatedShops($storeId);
+    }
+
+    public function getUnrelatedShops($storeId){
+
+        return $this->storeRepository->getUnrelatedShops($storeId);
+
     }
 
     public function store($data , $shopIds)
     {
         return $this->storeRepository->store($data, $shopIds);
+    }
+
+    public function addShops($storeId, $shopIds)
+    {
+        return $this->storeRepository->addShops($storeId, $shopIds);
+    }
+
+    public function removeShops($storeId, $shopIds)
+    {
+        return $this->storeRepository->removeShops($storeId, $shopIds);
     }
 
     public function update($data, $id)

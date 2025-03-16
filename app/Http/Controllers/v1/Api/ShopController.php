@@ -55,15 +55,27 @@ class ShopController extends Controller
         return ApiResponse::success($response , 'Unrelated articles retrieved successfully' , 200);
     }
 
-    public function getStores($shopId){
+    public function getRelatedStores($shopId){
         // Vérifier su l'utilisateur a la parmission 'views articles'
         if (!Auth::user()->can('view shop')) {
             return ApiResponse::error('Unauthorized', 403,'You do not have permission to view magazins.');
         }
         
-        $response = $this->shopService->getStores($shopId);
+        $response = $this->shopService->getRelatedStores($shopId);
 
         return ApiResponse::success($response , 'Magazins retrieved successfully' , 200);
+    }
+
+    public function getUnrelatedStores($shopId){
+
+        // Vérifier su l'utilisateur a la parmission 'views articles'
+        if (!Auth::user()->can('view shop')) {
+            return ApiResponse::error('Unauthorized', 403,'You do not have permission to view magazins.');
+        }
+        
+        $response = $this->shopService->getUnrelatedStores($shopId);
+
+        return ApiResponse::success($response , 'Unrelated magazins retrieved successfully' , 200);
     }
 
     public function store(Request $request)
@@ -122,6 +134,32 @@ class ShopController extends Controller
         return ApiResponse::success($response,'Shop added successfully to articles',200);
     }
 
+    public function addStores(Request $request,$shopId)
+    {
+        // Vérifier si l'utilisateur a la permission 'manage boutique'
+        if (!Auth::user()->can('update shop')) {
+            return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to update shop.']);
+        }
+       
+        // Valider les données de la requête
+        $validator = Validator::make($request->all(), [
+            'store_id' => 'required|array|min:1',
+            'store_id.*' => 'required|integer|exists:stores,id'
+        ]);
+
+
+        // Retourner les erreurs de validation si elles existent
+        if ($validator->fails()) {
+            return ApiResponse::error('Validation error', 422, $validator->errors());
+        }
+
+        $validatedData = $validator->validated();
+        $storeIds = $validatedData['store_id'];
+        $response = $this->shopService->addStores($shopId, $storeIds);
+
+        return ApiResponse::success($response,'Shop added successfully to stores',200);
+    }
+
     public function removeArticles(Request $request,$shopId)
     {
         // Vérifier si l'utilisateur a la permission 'manage boutique'
@@ -146,6 +184,32 @@ class ShopController extends Controller
         $response = $this->shopService->removeArticles($shopId, $articleIds);
 
         return ApiResponse::success($response,'Shop removed successfully from articles',200);
+    }
+
+    public function removeStores(Request $request,$shopId)
+    {
+        // Vérifier si l'utilisateur a la permission 'manage boutique'
+        if (!Auth::user()->can('update shop')) {
+            return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to update shop.']);
+        }
+       
+        // Valider les données de la requête
+        $validator = Validator::make($request->all(), [
+            'store_id' => 'required|array|min:1',
+            'store_id.*' => 'required|integer|exists:stores,id'
+        ]);
+
+
+        // Retourner les erreurs de validation si elles existent
+        if ($validator->fails()) {
+            return ApiResponse::error('Validation error', 422, $validator->errors());
+        }
+
+        $validatedData = $validator->validated();
+        $storeIds = $validatedData['store_id'];
+        $response = $this->shopService->removeStores($shopId, $storeIds);
+
+        return ApiResponse::success($response,'Shop removed successfully from stores',200);
     }
 
     public function update(Request $request,$shopId)

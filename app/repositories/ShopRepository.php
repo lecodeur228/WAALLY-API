@@ -4,6 +4,7 @@ namespace App\repositories;
 
 use App\Models\Article;
 use App\Models\Shop;
+use App\Models\Store;
 
 class ShopRepository
 {
@@ -35,12 +36,25 @@ class ShopRepository
 
     }
 
-
-    public function getStores($id){
+    public function getRelatedStores($id){
         $shop = Shop::find($id);
         return $shop->stores;   
     }
     
+    public function getUnrelatedStores($shopId){
+
+        $shop = Shop::find($shopId);
+
+        // Récupérer les IDs des magazins liés à l'article
+        $relatedStoreIds = $shop->stores()->pluck('store_id');
+
+        // Récupérer les magazins qui ne sont pas liés à l'article
+        $unrelatedStores = Store::whereNotIn('id', $relatedStoreIds)->get();
+
+        return $unrelatedStores;
+
+    }
+
     public function store($data)
     {
         return Shop::create($data);
@@ -58,12 +72,34 @@ class ShopRepository
         
     }
 
+    public function addStores($shopId, $storeIds)
+    {
+        $shop = Shop::find($shopId);
+
+        // Ajoute uniquement les nouvelles associations sans dupliquer les existantes
+        $shop->stores()->syncWithoutDetaching($storeIds);
+
+        // Retourne les magazins associés
+        return Store::whereIn('id', $storeIds)->get();
+        
+    }
+
     public function removeArticles($shopId, $articleIds)
     {
         $shop = Shop::find($shopId);
         // Détacher l'article de plusieurs shops en une seule requête
         $shop->articles()->detach($articleIds);
         $resposne = $shop->articles;
+
+        return $resposne;
+    }
+
+    public function removeStores($shopId, $storeIds)
+    {
+        $shop = Shop::find($shopId);
+        // Détacher l'article de plusieurs shops en une seule requête
+        $shop->stores()->detach($storeIds);
+        $resposne = $shop->stores;
 
         return $resposne;
     }
