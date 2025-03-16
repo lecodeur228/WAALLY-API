@@ -17,19 +17,34 @@ class ShopService
         return $this->shopRepository->getShops();
     }
 
-    public function getArticles($id){
-        return $this->shopRepository->getArticles($id);
+    public function getRelatedArticles($id){
+        return $this->shopRepository->getRelatedArticles($id);
     }
 
-    public function getMagazins($id) {
+    public function getUnrelatedArticles($shopId){
+
+        return $this->shopRepository->getUnrelatedArticles($shopId);
         
-        return $this->shopRepository->getMagazins($id);
+    }
+
+    public function getStores($id) {
+        
+        return $this->shopRepository->getStores($id);
 
     }
 
     public function store($data)
     {
         return $this->shopRepository->store($data);
+    }
+
+    public function addArticles($articleIds, $shopId){
+        return $this->shopRepository->addArticles($articleIds, $shopId);
+    }
+
+    public function removeArticles($shopId, $articleIds)
+    {
+        return $this->shopRepository->removeArticles($shopId, $articleIds);
     }
 
     public function update($data, $id)

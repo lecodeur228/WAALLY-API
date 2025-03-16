@@ -18,6 +18,11 @@ class StoreService
         return $this->storeRepository->getStores();
     }
 
+    public function getShops($storeId)
+    {
+        return $this->storeRepository->getShops($storeId);
+    }
+
     public function store($data , $shopIds)
     {
         return $this->storeRepository->store($data, $shopIds);

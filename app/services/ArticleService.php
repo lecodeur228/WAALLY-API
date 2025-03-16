@@ -19,10 +19,15 @@ class ArticleService {
 
     }
 
-    public function getShop($id){
+    public function getRelatedShops($id){
 
-        return $this->articleRepository->getShop($id);
+        return $this->articleRepository->getRelatedShops($id);
         
+    }
+
+    public function getUnrelatedShops($articleId){
+
+        return $this->articleRepository->getUnrelatedShops($articleId);
     }
 
     public function store($data , $shopIds) {
@@ -31,15 +36,28 @@ class ArticleService {
 
     }
 
+    public function addToshops($articleId , $shopIds) {
+        
+        return $this->articleRepository->addToShops($articleId , $shopIds);
+
+    }
+
+    public function removeFromShops($articleId , $shopIds) {
+
+        return $this->articleRepository->removeFromShops($articleId , $shopIds);
+    }
+
+    
+
     public function update($data , $id) {
         
         return $this->articleRepository->update($data , $id);
 
     }
 
-    public function delete($shopId , $id){
+    public function delete($id){
 
-        return $this->articleRepository->delete($shopId , $id);
+        return $this->articleRepository->delete($id);
 
     }
 }

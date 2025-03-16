@@ -28,6 +28,17 @@ class StoreController extends Controller
         return ApiResponse::success($response,'Stores retrieved successfully',200);
     }
 
+    public function getShops($storeId)
+    {
+        // vérifier si l'utilisateur a la permission 'view store'
+        if (!Auth::user()->can('view store')) {
+            return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to view store.']);
+        }
+        $response = $this->storeService->getShops($storeId);
+
+        return ApiResponse::success($response,'shops retrieved successfully',200);
+    }
+
     public function store(Request $request)
     {
         // vérifier si l'utilisateur a la permission 'create store'

@@ -31,24 +31,37 @@ class ShopController extends Controller
         return ApiResponse::success($response,'Shops retrieved successfully',200);
     }
 
-    public function getArticles($shopId){
+    public function getRelatedArticles($shopId)
+    {
         // Vérifier si l'utilisateur a la parmission 'view articles'
         if (!Auth::user()->can('view shop')) {
             return ApiResponse::error('Unauthorized', 403,'You do not have permission to view article.');
         }
         
-        $response = $this->shopService->getArticles($shopId);
+        $response = $this->shopService->getRelatedArticles($shopId);
 
         return ApiResponse::success($response , 'Artciles retrieved successfully' , 200);
     }
 
-    public function getMagazins($shopId){
+    public function getUnrelatedArticles($shopId){
+
+        // Vérifier si l'utilisateur a la parmission 'view articles'
+        if (!Auth::user()->can('view shop')) {
+            return ApiResponse::error('Unauthorized', 403,'You do not have permission to view article.');
+        }
+        
+        $response = $this->shopService->getUnrelatedArticles($shopId);
+
+        return ApiResponse::success($response , 'Unrelated articles retrieved successfully' , 200);
+    }
+
+    public function getStores($shopId){
         // Vérifier su l'utilisateur a la parmission 'views articles'
         if (!Auth::user()->can('view shop')) {
             return ApiResponse::error('Unauthorized', 403,'You do not have permission to view magazins.');
         }
         
-        $response = $this->shopService->getMagazins($shopId);
+        $response = $this->shopService->getStores($shopId);
 
         return ApiResponse::success($response , 'Magazins retrieved successfully' , 200);
     }
@@ -81,6 +94,58 @@ class ShopController extends Controller
         $response = $this->shopService->store($validatedData);
 
         return ApiResponse::success($response,'Shop created successfully',200);
+    }
+
+    public function addArticles(Request $request,$shopId)
+    {
+        // Vérifier si l'utilisateur a la permission 'manage boutique'
+        if (!Auth::user()->can('update shop')) {
+            return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to update shop.']);
+        }
+       
+        // Valider les données de la requête
+        $validator = Validator::make($request->all(), [
+            'article_id' => 'required|array|min:1',
+            'article_id.*' => 'required|integer|exists:articles,id'
+        ]);
+
+
+        // Retourner les erreurs de validation si elles existent
+        if ($validator->fails()) {
+            return ApiResponse::error('Validation error', 422, $validator->errors());
+        }
+
+        $validatedData = $validator->validated();
+        $articleIds = $validatedData['article_id'];
+        $response = $this->shopService->addArticles($articleIds, $shopId);
+
+        return ApiResponse::success($response,'Shop added successfully to articles',200);
+    }
+
+    public function removeArticles(Request $request,$shopId)
+    {
+        // Vérifier si l'utilisateur a la permission 'manage boutique'
+        if (!Auth::user()->can('update shop')) {
+            return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to update shop.']);
+        }
+       
+        // Valider les données de la requête
+        $validator = Validator::make($request->all(), [
+            'article_id' => 'required|array|min:1',
+            'article_id.*' => 'required|integer|exists:articles,id'
+        ]);
+
+
+        // Retourner les erreurs de validation si elles existent
+        if ($validator->fails()) {
+            return ApiResponse::error('Validation error', 422, $validator->errors());
+        }
+
+        $validatedData = $validator->validated();
+        $articleIds = $validatedData['article_id'];
+        $response = $this->shopService->removeArticles($shopId, $articleIds);
+
+        return ApiResponse::success($response,'Shop removed successfully from articles',200);
     }
 
     public function update(Request $request,$shopId)

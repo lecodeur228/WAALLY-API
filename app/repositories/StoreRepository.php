@@ -12,6 +12,12 @@ class StoreRepository
         return Store::all();
     }
 
+    public function getShops($storeId)
+    {
+        $store = Store::find($storeId);
+        return $store->shops;
+    }
+
     public function store($data, $shopIds)
     {
         $store = Store::create($data);
@@ -34,12 +40,12 @@ class StoreRepository
     public function delete($id)
     {
         $store = Store::find($id);
+        $shops = $store->shops;
         $store->state = 1;
         $store->save();
-        $shopIds = $store->shops()->id;
-        if($shopIds){
-            foreach ($shopIds as $shopId) {
-                $store->shops()->detach($shopId);
+        if($shops){
+            foreach ($shops as $shop) {
+                $store->shops()->detach($shop->id);
             }
         }
         return $store;
