@@ -5,14 +5,16 @@ namespace App\repositories;
 use App\Models\Article;
 use App\Models\Shop;
 use App\Models\Store;
+use Illuminate\Support\Facades\Auth;
 
 class ShopRepository
 {
     public function getShops()
     {
+        $userConnectedId = Auth::user()->id;
         return Shop::with(['user' => function($query) {
             $query->select('id', 'name', 'email', 'phone');
-        }])->get(['id', 'name', 'description', 'city', 'longitude', 'latitude', 'created_at', 'updated_at', 'user_id']);
+        }])->where("user_id" ,$userConnectedId)->get(['id', 'name', 'description', 'city', 'longitude', 'latitude', 'created_at', 'updated_at', 'user_id']);
     }
 
     

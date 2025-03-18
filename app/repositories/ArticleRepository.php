@@ -5,6 +5,7 @@ namespace App\repositories;
 use App\Models\Article;
 use App\Models\Shop;
 use GuzzleHttp\Psr7\Message;
+use Illuminate\Support\Facades\Auth;
 
 class ArticleRepository{
 
@@ -28,7 +29,8 @@ class ArticleRepository{
         $relatedShopIds = $article->shops()->pluck('shop_id');
 
         // Récupérer les shops qui ne sont pas liés à l'article
-        $unrelatedShops = Shop::whereNotIn('id', $relatedShopIds)->get();
+        $userConnectedId = Auth::user()->id;
+        $unrelatedShops = Shop::whereNotIn('id', $relatedShopIds)->where('user_id', $userConnectedId)->get();
 
         return $unrelatedShops;
 
