@@ -132,6 +132,11 @@ class CreateDefaultRolesAndPermissions extends Command
             'update store',
             'delete store', 
             'view store',
+            //"manage boutique",
+            'create shop',
+            'update shop',
+            'delete shop',
+            'view shop',
             ]
           );
           $sellerRole = Role::findByName('seller');

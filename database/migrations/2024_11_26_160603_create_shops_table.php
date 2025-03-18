@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('city');
             $table->decimal('latitude', 10, 8);
             $table->decimal('longitude', 10, 8);
-            $table->foreignIdFor(User::class)->constrained()->onDelete('set null');
+            $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
             $table->integer('state')->default(0);
             $table->timestamps();
         });
