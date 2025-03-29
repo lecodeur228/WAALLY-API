@@ -7,16 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Store extends Model
 {
-    protected $fillable = ["name","description","boutique_id"];
+    protected $fillable = ["name","description"];
 
     protected static function booted()
     {
         static::addGlobalScope(new StateScope());
     }
 
-    public function shop()
+    public function shops()
     {
-        return $this->belongsTo(Shop::class);
+        return $this->belongsToMany(Shop::class);
     }
 
     public function inventaires(){

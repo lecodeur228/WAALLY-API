@@ -13,8 +13,8 @@ class Article extends Model
     {
         static::addGlobalScope(new StateScope());
     }
-    public function shop(){
-        return $this->belongsTo(Shop::class);
+    public function shops(){
+        return $this->belongsToMany(Shop::class);
     }
 
     public function images(){
