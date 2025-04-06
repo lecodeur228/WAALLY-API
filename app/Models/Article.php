@@ -32,4 +32,8 @@ class Article extends Model
     public function stocks(){
         return $this->hasMany(Stock::class);
     }
+
+    public function supplier(){
+        return $this->belongsTo(Supplier::class);
+    }
 }

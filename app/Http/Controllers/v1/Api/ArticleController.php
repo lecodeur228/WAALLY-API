@@ -87,7 +87,7 @@ class ArticleController extends Controller
 
         $response = $this->articleService->store($validatedDataWithoutShop , $shopIds);
 
-        return ApiResponse::success($response , 'Article created succesfully ' , 200);
+        return ApiResponse::success($response , 'Article created succesfully ' , 201);
 
     }
 

@@ -20,7 +20,6 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('fcm_token')->nullable();
-            $table->foreignIdFor(User::class)->nullable()->constrained()->onDelete('set null');
             $table->integer('state')->default(0);
             $table->rememberToken();
             $table->timestamps();

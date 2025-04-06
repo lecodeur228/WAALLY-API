@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+
 class UserRepository {
 
     public function register(array $data, AccountType $accountType) {
@@ -71,5 +72,10 @@ class UserRepository {
             'permissions' => $permissions,
             'token' => $token,
         ];
+    }
+
+    public function getUser() {
+        $user = Auth::user();
+        return $user;
     }
 }

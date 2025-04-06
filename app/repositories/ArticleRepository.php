@@ -12,7 +12,6 @@ class ArticleRepository{
     public function getArticles($id){
         $shop = Shop::find($id);
         return $shop->articles;
-
     }
 
     public function getRelatedShops($id){
@@ -92,18 +91,19 @@ class ArticleRepository{
         }
         return $response;
     }   */
+
     public function removeFromShops($articleId, array $shopIds)
     {
         $article = Article::find($articleId);
-    
+
         // Détacher l'article de plusieurs shops en une seule requête
         $article->shops()->detach($shopIds);
         $response= $article->shops;
-    
+
         return $response;
     }
-    
-    
+
+
     // il faut un try catch ici
     public  function delete($id){
 

@@ -22,4 +22,8 @@ class UserService {
     {
         return $this->userRepository->login($request);
     }
+
+    public function getUser(){
+        return $this->userRepository->getUser();
+    }
 }

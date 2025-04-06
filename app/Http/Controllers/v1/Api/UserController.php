@@ -27,7 +27,6 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'account_type' => 'required|string|in:admin,owner,seller',
             'password' => 'required|string|min:8',
-            'account_type' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
         ]);
 
@@ -75,5 +74,11 @@ class UserController extends Controller
         }
 
         return ApiResponse::error($response['message'], 401);
+    }
+    
+    public function getUser(Request $request)
+    {
+        $user = $this->userService->getUser();
+        return ApiResponse::success($user,'User retrieved successfully', 200);
     }
 }

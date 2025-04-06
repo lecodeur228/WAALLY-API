@@ -37,7 +37,7 @@ class ShopController extends Controller
         if (!Auth::user()->can('view shop')) {
             return ApiResponse::error('Unauthorized', 403,'You do not have permission to view article.');
         }
-        
+
         $response = $this->shopService->getRelatedArticles($shopId);
 
         return ApiResponse::success($response , 'Artciles retrieved successfully' , 200);
@@ -49,7 +49,7 @@ class ShopController extends Controller
         if (!Auth::user()->can('view shop')) {
             return ApiResponse::error('Unauthorized', 403,'You do not have permission to view article.');
         }
-        
+
         $response = $this->shopService->getUnrelatedArticles($shopId);
 
         return ApiResponse::success($response , 'Unrelated articles retrieved successfully' , 200);
@@ -60,7 +60,7 @@ class ShopController extends Controller
         if (!Auth::user()->can('view shop')) {
             return ApiResponse::error('Unauthorized', 403,'You do not have permission to view magazins.');
         }
-        
+
         $response = $this->shopService->getRelatedStores($shopId);
 
         return ApiResponse::success($response , 'Magazins retrieved successfully' , 200);
@@ -72,7 +72,7 @@ class ShopController extends Controller
         if (!Auth::user()->can('view shop')) {
             return ApiResponse::error('Unauthorized', 403,'You do not have permission to view magazins.');
         }
-        
+
         $response = $this->shopService->getUnrelatedStores($shopId);
 
         return ApiResponse::success($response , 'Unrelated magazins retrieved successfully' , 200);
@@ -91,8 +91,8 @@ class ShopController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'city' => 'required|string',
-            'latitude' => 'required|string',
-            'longitude' => 'required|string',
+            'latitude' => 'required',
+            'longitude' => 'required',
         ]);
 
         // Retourner les erreurs de validation si elles existent
@@ -101,7 +101,7 @@ class ShopController extends Controller
         }
 
         $validatedData = $validator->validated();
-        
+
         $validatedData['user_id'] = Auth::user()->id;
         $response = $this->shopService->store($validatedData);
 
@@ -114,7 +114,7 @@ class ShopController extends Controller
         if (!Auth::user()->can('update shop')) {
             return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to update shop.']);
         }
-       
+
         // Valider les données de la requête
         $validator = Validator::make($request->all(), [
             'article_id' => 'required|array|min:1',
@@ -140,7 +140,7 @@ class ShopController extends Controller
         if (!Auth::user()->can('update shop')) {
             return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to update shop.']);
         }
-       
+
         // Valider les données de la requête
         $validator = Validator::make($request->all(), [
             'store_id' => 'required|array|min:1',
@@ -166,7 +166,7 @@ class ShopController extends Controller
         if (!Auth::user()->can('update shop')) {
             return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to update shop.']);
         }
-       
+
         // Valider les données de la requête
         $validator = Validator::make($request->all(), [
             'article_id' => 'required|array|min:1',
@@ -192,7 +192,7 @@ class ShopController extends Controller
         if (!Auth::user()->can('update shop')) {
             return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to update shop.']);
         }
-       
+
         // Valider les données de la requête
         $validator = Validator::make($request->all(), [
             'store_id' => 'required|array|min:1',
@@ -218,7 +218,7 @@ class ShopController extends Controller
         if (!Auth::user()->can('update shop')) {
             return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to update shop.']);
         }
-       
+
         // Valider les données de la requête
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -228,7 +228,7 @@ class ShopController extends Controller
             'longitude' => 'required|string',
         ]);
 
-        // dd($validator);  
+        // dd($validator);
 
         // Retourner les erreurs de validation si elles existent
         if ($validator->fails()) {
@@ -265,10 +265,10 @@ class ShopController extends Controller
           if (!Auth::user()->can('update shop')) {
             return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to update shop.']);
         }
-       
+
         // Valider les données de la requête
         $validator = Validator::make($request->all(), [
-           
+
             'user_id' => 'required|integer|exists:users,id',
         ]);
 
