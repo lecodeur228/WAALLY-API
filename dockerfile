@@ -42,7 +42,7 @@ COPY ./env.example .env
 RUN php artisan key:generate
 
 # Configuration des permissions
-RUN chown -R www-data:www-data //var/app/prod/wally-app \
+RUN chown -R www-data:www-data /var/app/prod/wally-app \
     && chmod -R 755 /var/app/prod/wally-app/public/storage
 
 # Optimiser pour la production si nécessaire
