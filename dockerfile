@@ -36,7 +36,7 @@ RUN composer install --no-dev --optimize-autoloader
 RUN npm install && npm run build
 
 # Copier le fichier .env.example pour l'environnement approprié
-COPY env.example .env
+COPY ./env.example .env
 
 # Générer la clé Laravel
 RUN php artisan key:generate
