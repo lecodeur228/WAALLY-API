@@ -1,6 +1,6 @@
 <?php
 
-namespace App\repositories;
+namespace App\Repositories;
 
 use App\Models\Article;
 use App\Models\Shop;
@@ -13,6 +13,7 @@ class ArticleRepository{
         $shop = Shop::find($id);
         return $shop->articles;
     }
+
 
     public function getRelatedShops($id){
 

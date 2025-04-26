@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\v1\Api;
 
-use App\helpers\ApiResponse;
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Shop;
-use App\services\ShopService;
+use App\Services\ShopService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;

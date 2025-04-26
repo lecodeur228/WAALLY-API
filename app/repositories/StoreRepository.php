@@ -1,6 +1,6 @@
 <?php
 
-namespace App\repositories;
+namespace App\Repositories;
 
 use App\Models\Shop;
 use App\Models\Store;
@@ -51,7 +51,7 @@ class StoreRepository
 
         // Retourne les magazins associés
         return Shop::whereIn('id', $shopIds)->get();
-        
+
     }
 
     public function removeShops($storeId, $shopIds)

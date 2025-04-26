@@ -1,6 +1,6 @@
 <?php
 
-namespace App\repositories;
+namespace App\Repositories;
 
 use App\Models\Supplier;
 use Illuminate\Support\Facades\Auth;

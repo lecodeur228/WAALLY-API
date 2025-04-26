@@ -4,11 +4,11 @@ namespace App\Http\Controllers\v1\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\enums\AccountType;
+use App\Enums\AccountType;
 //use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\helpers\ApiResponse;
-use App\services\UserService;
+use App\Helpers\ApiResponse;
+use App\Services\UserService;
 
 class UserController extends Controller
 {
@@ -75,7 +75,7 @@ class UserController extends Controller
 
         return ApiResponse::error($response['message'], 401);
     }
-    
+
     public function getUser(Request $request)
     {
         $user = $this->userService->getUser();

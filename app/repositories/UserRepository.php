@@ -1,6 +1,6 @@
 <?php
 
-namespace App\repositories;
+namespace App\Repositories;
 
 use App\Enums\AccountType;
 use App\helpers\ApiResponse;
@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Hash;
 class UserRepository {
 
     public function register(array $data, AccountType $accountType) {
-        
-        
+
+
         // Créer l'utilisateur
         $user = User::create([
             'name' => $data["name"],
@@ -29,7 +29,7 @@ class UserRepository {
     }
 
     public function login(array $data){
-      
+
         // Trouver l'utilisateur par email ou téléphone
         $user = User::where('email', $data['email_or_phone'])
                     ->orWhere('phone', $data['email_or_phone'])

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\services;
+namespace App\Services;
 
 use App\repositories\ArticleRepository;
 
 class ArticleService {
-    
+
     protected $articleRepository;
 
     public function __construct(ArticleRepository $articleRepository)
@@ -22,7 +22,7 @@ class ArticleService {
     public function getRelatedShops($id){
 
         return $this->articleRepository->getRelatedShops($id);
-        
+
     }
 
     public function getUnrelatedShops($articleId){
@@ -31,13 +31,13 @@ class ArticleService {
     }
 
     public function store($data , $shopIds) {
-        
+
         return $this->articleRepository->store($data,$shopIds);
 
     }
 
     public function addToshops($articleId , $shopIds) {
-        
+
         return $this->articleRepository->addToShops($articleId , $shopIds);
 
     }
@@ -47,10 +47,10 @@ class ArticleService {
         return $this->articleRepository->removeFromShops($articleId , $shopIds);
     }
 
-    
+
 
     public function update($data , $id) {
-        
+
         return $this->articleRepository->update($data , $id);
 
     }

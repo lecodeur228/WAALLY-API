@@ -1,6 +1,6 @@
 <?php
 
-namespace App\repositories;
+namespace App\Repositories;
 
 use App\Models\Article;
 use App\Models\Shop;
@@ -17,7 +17,7 @@ class ShopRepository
         }])->where("user_id" ,$userConnectedId)->get(['id', 'name', 'description', 'city', 'longitude', 'latitude', 'created_at', 'updated_at', 'user_id']);
     }
 
-    
+
 
     public function getRelatedArticles($id){
         $shop = Shop::find($id);
@@ -40,9 +40,9 @@ class ShopRepository
 
     public function getRelatedStores($id){
         $shop = Shop::find($id);
-        return $shop->stores;   
+        return $shop->stores;
     }
-    
+
     public function getUnrelatedStores($shopId){
 
         $shop = Shop::find($shopId);
@@ -71,7 +71,7 @@ class ShopRepository
 
         // Retourne les articles associés
         return Article::whereIn('id', $articleIds)->get();
-        
+
     }
 
     public function addStores($shopId, $storeIds)
@@ -83,7 +83,7 @@ class ShopRepository
 
         // Retourne les magazins associés
         return Store::whereIn('id', $storeIds)->get();
-        
+
     }
 
     public function removeArticles($shopId, $articleIds)

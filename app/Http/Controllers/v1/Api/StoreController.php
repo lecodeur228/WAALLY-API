@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\v1\Api;
 
-use App\helpers\ApiResponse;
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\services\StoreService;
+use App\Services\StoreService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -70,7 +70,7 @@ class StoreController extends Controller
         }
 
         $validatedData = $validator->validated();
-        
+
         $validatedDataWithoutShop['name'] = $validatedData['name'];
         $validatedDataWithoutShop['description'] = $validatedData['description'];
 
@@ -87,7 +87,7 @@ class StoreController extends Controller
         if (!Auth::user()->can('update store')) {
             return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to update store.']);
         }
-       
+
         // Valider les données de la requête
         $validator = Validator::make($request->all(), [
             'shop_id' => 'required|array|min:1',
@@ -113,7 +113,7 @@ class StoreController extends Controller
         if (!Auth::user()->can('update store')) {
             return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to update store.']);
         }
-       
+
         // Valider les données de la requête
         $validator = Validator::make($request->all(), [
             'shop_id' => 'required|array|min:1',
@@ -139,14 +139,14 @@ class StoreController extends Controller
         if (!Auth::user()->can('update store')) {
             return ApiResponse::error('Unauthorized', 403, ['message' => 'You do not have permission to update store.']);
         }
-       
+
         // Valider les données de la requête
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'description' => 'required|string',
         ]);
 
-        // dd($validator);  
+        // dd($validator);
 
         // Retourner les erreurs de validation si elles existent
         if ($validator->fails()) {

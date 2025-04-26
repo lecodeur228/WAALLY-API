@@ -1,6 +1,6 @@
 <?php
 
-namespace App\services;
+namespace App\Services;
 
 use App\repositories\ShopRepository;
 
@@ -11,7 +11,7 @@ class ShopService
     {
         $this->shopRepository = $shopRepository;
     }
-    
+
     public function getShops()
     {
         return $this->shopRepository->getShops();
@@ -24,11 +24,11 @@ class ShopService
     public function getUnrelatedArticles($shopId){
 
         return $this->shopRepository->getUnrelatedArticles($shopId);
-        
+
     }
 
     public function getRelatedStores($id) {
-        
+
         return $this->shopRepository->getRelatedStores($id);
 
     }

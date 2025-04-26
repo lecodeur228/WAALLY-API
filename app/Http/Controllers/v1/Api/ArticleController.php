@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\V1\Api;
 
-use App\helpers\ApiResponse;
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Shop;
-use App\services\ArticleService;
+use App\Services\ArticleService;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +23,7 @@ class ArticleController extends Controller
     }
 
     /**public function getArticles($shopId){
-        
+
         // Vérifier si l'utilisateur a la permission de 'view article'
 
         if(!Auth::user()->can('view articles')){
@@ -49,7 +49,7 @@ class ArticleController extends Controller
     }
 
     public function store(Request $request){
-         
+
         // Vérifier si l'utilisateur a la permision 'create Artciles'
         if(!Auth::user()->can('create articles')){
             return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to create articles.');
@@ -67,7 +67,7 @@ class ArticleController extends Controller
             "shop_id.*" => 'required|integer|exists:shops,id'
         ]);
 
-        // Retourner les erreurs de validation si elles existent 
+        // Retourner les erreurs de validation si elles existent
 
         if($validator->fails()){
             return ApiResponse::error('Validation error' , 422 , $validator->errors());
@@ -92,7 +92,7 @@ class ArticleController extends Controller
     }
 
     public function addToshops(Request $request,$articelId){
-        
+
         // Vérifier si l'utilisateur a la permision 'update Artciles'
         if(!Auth::user()->can('update articles')){
             return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to update articles.');
@@ -105,7 +105,7 @@ class ArticleController extends Controller
             "shop_id.*" => 'required|integer|exists:shops,id'
         ]);
 
-        // Retourner les erreurs de validation si elles existent 
+        // Retourner les erreurs de validation si elles existent
 
         if($validator->fails()){
             return ApiResponse::error('Validation error' , 422 , $validator->errors());
@@ -130,7 +130,7 @@ class ArticleController extends Controller
             "shop_id"=> 'required|array|min:1',
             "shop_id.*" => 'required|integer|exists:shops,id'
         ]);
-        // Retourner les erreurs de validation si elles existent 
+        // Retourner les erreurs de validation si elles existent
 
         if($validator->fails()){
             return ApiResponse::error('Validation error' , 422 , $validator->errors());
@@ -171,7 +171,7 @@ class ArticleController extends Controller
             "buy_price" => 'required|numeric|max_digits:10|min_digits:2',
         ]);
 
-        // Retourner les erreurs de validation si elles existent 
+        // Retourner les erreurs de validation si elles existent
 
         if($validator->fails()){
             return ApiResponse::error('Validation error' , 422 , $validator->errors());
@@ -199,6 +199,6 @@ class ArticleController extends Controller
             return ApiResponse::success($response,'Article deleted successfully',200);
         }
         return ApiResponse::error("The Shop do not exist" , 400);
-        
+
     }
 }

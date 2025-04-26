@@ -5,8 +5,8 @@ namespace App\Http\Controllers\v1\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\helpers\ApiResponse;
-use App\services\SupplierService;
+use App\Helpers\ApiResponse;
+use App\Services\SupplierService;
 
 
 class SupplierController extends Controller
