@@ -1,16 +1,12 @@
 pipeline {
     agent any
 
-    parameters {
-        choice(name: 'ENVIRONMENT', choices: ['production', 'development'], description: 'Select deployment environment')
-    }
-
     environment {
-        IMAGE_NAME = "ghcr.io/waally-api:${params.ENVIRONMENT}-latest"
-        CONTAINER_NAME = "wally-app-${params.ENVIRONMENT}"
+        IMAGE_NAME = "ghcr.io/waally-api:latest"
+        CONTAINER_NAME = "wally-app"
         SERVER_USER = "root"
-        SERVER_IP = "213.210.20.19"
-        DEPLOY_PATH = "/var/app/${params.ENVIRONMENT}/wally-app"
+        SERVER_IP = "213.210.20.19 "
+        DEPLOY_PATH = "/var/app/prod/wally-app"
     }
 
     stages {
@@ -23,9 +19,9 @@ pipeline {
         stage('Build & Push Docker Image') {
             steps {
                 script {
-                    sh "docker build --no-cache --build-arg ENV=${params.ENVIRONMENT} -t ${IMAGE_NAME} ."
+                    sh 'docker build --no-cache -t $IMAGE_NAME .'
                     withDockerRegistry([credentialsId: 'github-token', url: 'https://ghcr.io']) {
-                        sh "docker push ${IMAGE_NAME}"
+                        sh 'docker push $IMAGE_NAME'
                     }
                 }
             }
@@ -36,31 +32,36 @@ pipeline {
                 script {
                     sshagent(['server-ssh-key']) {
                         sh """
-                        ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << EOF
+                        ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
                         echo "🛠 Vérification du répertoire $DEPLOY_PATH"
                         if [ ! -d "$DEPLOY_PATH" ]; then
                             echo "Création du dossier projet!"
                             mkdir -p $DEPLOY_PATH
                         fi
 
-                        # Copier les fichiers de configuration
-                        echo "📂 Préparation des fichiers de configuration..."
-                        echo "ENVIRONMENT=${params.ENVIRONMENT}" > $DEPLOY_PATH/.env
-                        echo "IMAGE_NAME=${IMAGE_NAME}" >> $DEPLOY_PATH/.env
-                        echo "CONTAINER_NAME=${CONTAINER_NAME}" >> $DEPLOY_PATH/.env
+                        echo "📂 Vérification du contenu du dossier Laravel..."
+                        if [ -z "\$(ls -A $DEPLOY_PATH)" ]; then
+                            echo "🚀 Copie des fichiers Laravel depuis le conteneur..."
+                            CONTAINER_ID=\$(docker create $IMAGE_NAME)
+                            docker cp \$CONTAINER_ID:/var/app/prod/sygpre/. $DEPLOY_PATH
+                            docker rm \$CONTAINER_ID
+                        fi
 
-                        # Copier Docker Compose et configs Nginx
-                        scp docker-compose.yml $SERVER_USER@$SERVER_IP:$DEPLOY_PATH/
-                        scp -r docker $SERVER_USER@$SERVER_IP:$DEPLOY_PATH/
+                        echo "🛠 Vérification du fichier .env"
+                        if [ ! -f "$DEPLOY_PATH/.env" ]; then
+                            echo "🚀 Création d'un fichier .env vide..."
+                            touch $DEPLOY_PATH/.env
+                            cp $DEPLOY_PATH/.env.example $DEPLOY_PATH/.env
+                        fi
 
                         echo "🛠 Stopping old containers.."
-                        cd $DEPLOY_PATH
-                        docker-compose down || true
+                        docker-compose -f $DEPLOY_PATH/docker-compose.yml down || true
 
                         echo "🔄 Pulling latest image.."
                         docker pull $IMAGE_NAME
 
                         echo "🚀 Starting application..."
+                        cd $DEPLOY_PATH
                         docker-compose up -d --force-recreate --build
 
                         echo "✅ Deployment complete!"
