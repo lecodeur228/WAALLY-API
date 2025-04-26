@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  # Service de l'application Laravel
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ENV: ${ENVIRONMENT:-production}
+    image: ${IMAGE_NAME:-ghcr.io/waally-api:latest}
+    container_name: ${CONTAINER_NAME:-wally-app}
+    restart: unless-stopped
+    volumes:
+      - ./storage:/var/www/html/storage
+    networks:
+      - wally-network
+    depends_on:
+      - db
+      - redis
+
+  # Serveur web Nginx
+  nginx:
+    image: nginx:stable-alpine
+    container_name: wally-nginx
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-80}:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - wally-network
+    depends_on:
+      - app
+
+  # Service de base de données
+  db:
+    image: mysql:8.0
+    container_name: wally-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-wally_db}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-secret}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+      MYSQL_USER: ${DB_USERNAME:-wally}
+    volumes:
+      - wally-db-data:/var/lib/mysql
+    networks:
+      - wally-network
+
+  # Service Redis pour le cache et les files d'attente
+  redis:
+    image: redis:alpine
+    container_name: wally-redis
+    restart: unless-stopped
+    networks:
+      - wally-network
+
+networks:
+  wally-network:
+    driver: bridge
+
+volumes:
+  wally-db-data:
