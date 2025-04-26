@@ -24,10 +24,10 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Définir le répertoire de travail
-WORKDIR /var/www/html
+WORKDIR /var/app/prod/wally-app
 
 # Copier les fichiers du projet
-COPY . /var/www/html/
+COPY . /var/app/prod/wally-app/
 
 # Installation des dépendances Composer
 RUN composer install --no-dev --optimize-autoloader
@@ -42,8 +42,8 @@ COPY ./env.example .env
 RUN php artisan key:generate
 
 # Configuration des permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage
+RUN chown -R www-data:www-data //var/app/prod/wally-app \
+    && chmod -R 755 /var/app/prod/wally-app/public/storage
 
 # Optimiser pour la production si nécessaire
 RUN php artisan config:cache && \

@@ -5,7 +5,7 @@ pipeline {
         IMAGE_NAME = "ghcr.io/waally-api:latest"
         CONTAINER_NAME = "wally-app"
         SERVER_USER = "root"
-        SERVER_IP = "213.210.20.19 "
+        SERVER_IP = "213.210.20.19"
         DEPLOY_PATH = "/var/app/prod/wally-app"
     }
 
