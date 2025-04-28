@@ -2,35 +2,101 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\StateScope;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Scopes\StateScope;
+
 
 class Shop extends Model
 {
-    use HasFactory;
 
-    protected $fillable = ["name","description","city","latitude","longitude","user_id"];
+     protected $fillable = [
+        'name',
+        'address',
+        // owner_id sera ajouté par la migration
+    ];
 
-    protected static function booted()
+     protected static function booted()
     {
         static::addGlobalScope(new StateScope());
     }
 
-    public function user()
+     /**
+     * Relation vers le propriétaire de la boutique
+     * Relation "appartient à" (belongsTo)
+     */
+    public function owner(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function articles(){
-        return $this->belongsToMany(Article::class);
+    /**
+     * Relation vers les articles de la boutique
+     * Relation "possède plusieurs" (hasMany)
+     */
+    public function articles(): HasMany
+    {
+        return $this->hasMany(ArticleShop::class);
     }
 
-    public function stocks(){
-        return $this->hasMany(Stock::class);
+    /**
+     * Relation vers les magazines de la boutique
+     * Relation "possède plusieurs" (hasMany)
+     */
+    public function magazines(): HasMany
+    {
+        return $this->hasMany(Magazine::class);
     }
 
-    public function stores() {
-        return $this->belongsToMany(Store::class);
+    /**
+     * Relation vers les abonnements de la boutique
+     * Relation "possède plusieurs" (hasMany)
+     */
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    /**
+     * Relation vers les portefeuilles de la boutique
+     * Relation "possède plusieurs" (hasMany)
+     */
+    public function wallets(): HasMany
+    {
+        return $this->hasMany(Wallet::class);
+    }
+
+    /**
+     * Relation vers les approbations de la boutique
+     * Relation "possède plusieurs" (hasMany)
+     */
+    public function approvals(): HasMany
+    {
+        return $this->hasMany(Approve::class);
+    }
+
+    /**
+     * Relation vers les ventes effectuées dans la boutique
+     * Relation "possède plusieurs" (hasMany)
+     */
+    public function sales(): HasMany
+    {
+        return $this->hasMany(Sale::class);
+    }
+
+    // /**
+    //  * Relation vers les utilisateurs associés à la boutique
+    //  * Relation "possède plusieurs" (hasMany)
+    //  */
+    // public function users(): HasMany
+    // {
+    //     return $this->hasMany(User::class);
+    // }
+
+     public function users()
+    {
+        return $this->belongsToMany(User::class)
+                    ->using(ShopUser::class)
+                    ->withPivot('role')
+                    ->withTimestamps();
     }
 }

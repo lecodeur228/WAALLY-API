@@ -1,10 +1,9 @@
 <?php
 
-use App\Models\Boutique;
-use App\Models\Shop;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Customer;
 
 return new class extends Migration
 {
@@ -13,12 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('finances', function (Blueprint $table) {
+        Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->decimal('amount', 10, 2);
-            $table->enum('type', ['Entrer', 'Sortir']);
-            $table->text('reason');
-            $table->foreignIdFor(Shop::class);
+             $table->string('ref')->unique();
+            $table->foreignIdFor(Customer::class)->constrained()->cascadeOnDelete();
+            $table->integer('state')->default(0);
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('finances');
+        Schema::dropIfExists('invoices');
     }
 };

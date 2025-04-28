@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use App\Models\Article;
+use App\Models\Magazine;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('article_magazines', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(Article::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Magazine::class)->constrained()->cascadeOnDelete();
+            $table->integer('quantity')->default(0);
+            $table->integer('state')->default(0);
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('article_magazines');
+    }
+};

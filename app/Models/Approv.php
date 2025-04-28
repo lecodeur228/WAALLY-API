@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Scopes\StateScope;
 
 
-class Image extends Model
+class Approv extends Model
 {
      protected $fillable = [
-        'image_path',
+        'quantite',
+        'type',
         // article_id sera ajouté par la migration
+        // shop_id sera ajouté par la migration
     ];
 
      protected static function booted()
@@ -19,11 +21,20 @@ class Image extends Model
     }
 
     /**
-     * Relation vers l'article associé à l'image
+     * Relation vers l'article associé
      * Relation "appartient à" (belongsTo)
      */
     public function article(): BelongsTo
     {
         return $this->belongsTo(Article::class);
+    }
+
+    /**
+     * Relation vers la boutique associée
+     * Relation "appartient à" (belongsTo)
+     */
+    public function shop(): BelongsTo
+    {
+        return $this->belongsTo(Shop::class);
     }
 }

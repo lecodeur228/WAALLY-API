@@ -1,9 +1,10 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Supplier;
+use App\Models\User;
 
 return new class extends Migration
 {
@@ -17,9 +18,10 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('sale_price', 10, 2);
-            $table->decimal('buy_price', 10, 2);
-            $table->boolean("state")->default(0);
-            $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
+            $table->decimal('purchase_price', 10, 2);
+            $table->foreignIdFor(Supplier::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(User::class, 'owner_id')->constrained('users')->cascadeOnDelete();
+            $table->integer('state')->default(0);
             $table->timestamps();
         });
     }

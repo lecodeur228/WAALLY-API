@@ -2,24 +2,25 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\StateScope;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Scopes\StateScope;
 
-class Supplier extends Model
+
+class Customer extends Model
 {
+
      protected $fillable = [
-        'nom',
+        'name',
         'phone',
         // owner_id sera ajouté par la migration
     ];
-
      protected static function booted()
     {
         static::addGlobalScope(new StateScope());
     }
 
     /**
-     * Relation vers le propriétaire du fournisseur
+     * Relation vers le propriétaire du client
      * Relation "appartient à" (belongsTo)
      */
     public function owner(): BelongsTo
@@ -28,11 +29,11 @@ class Supplier extends Model
     }
 
     /**
-     * Relation vers les articles fournis par ce fournisseur
+     * Relation vers les factures du client
      * Relation "possède plusieurs" (hasMany)
      */
-    public function articles(): HasMany
+    public function invoices(): HasMany
     {
-        return $this->hasMany(Article::class);
+        return $this->hasMany(Invoice::class);
     }
 }

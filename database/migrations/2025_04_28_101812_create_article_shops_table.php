@@ -1,9 +1,10 @@
 <?php
 
-use App\Models\Article;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Article;
+use App\Models\Shop;
 
 return new class extends Migration
 {
@@ -12,10 +13,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('images', function (Blueprint $table) {
+        Schema::create('article_shops', function (Blueprint $table) {
             $table->id();
-            $table->string('image_path');
-            $table->foreignIdFor(Article::class);
+            $table->foreignIdFor(Article::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Shop::class)->constrained()->cascadeOnDelete();
+            $table->integer('quantity')->default(0);
             $table->integer('state')->default(0);
             $table->timestamps();
         });
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('images');
+        Schema::dropIfExists('article_shops');
     }
 };

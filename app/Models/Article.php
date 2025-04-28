@@ -2,38 +2,108 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\StateScope;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Scopes\StateScope;
+
 
 class Article extends Model
 {
-    protected $fillable = ["name","description","sale_price","buy_price","shop_id"];
+    protected $fillable = [
+        'name',
+        'description',
+        'sale_price',
+        'purchase_price',
+        // supplier_id sera ajouté par la migration
+        // owner_id sera ajouté par la migration
+    ];
 
-    protected static function booted()
+     protected static function booted()
     {
         static::addGlobalScope(new StateScope());
     }
-    public function shops(){
-        return $this->belongsToMany(Shop::class);
+
+    /**
+     * Relation vers le fournisseur de l'article
+     * Relation "appartient à" (belongsTo)
+     */
+    public function supplier(): BelongsTo
+    {
+        return $this->belongsTo(Supplier::class);
     }
 
-    public function images(){
+    /**
+     * Relation vers le propriétaire de l'article
+     * Relation "appartient à" (belongsTo)
+     */
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    /**
+     * Relation vers les images associées à l'article
+     * Relation "possède plusieurs" (hasMany)
+     */
+    public function images(): HasMany
+    {
         return $this->hasMany(Image::class);
     }
 
-    public function inventaires(){
-        return $this->hasMany(Inventory::class);
+    /**
+     * Relation vers les articles dans les magazines (table pivot)
+     * Relation "possède plusieurs" (hasMany)
+     */
+    public function magazineRelations(): HasMany
+    {
+        return $this->hasMany(ArticleMagazine::class);
     }
 
-    public function ventes(){
+    /**
+     * Relation vers les articles dans les boutiques (table pivot)
+     * Relation "possède plusieurs" (hasMany)
+     */
+    public function shopRelations(): HasMany
+    {
+        return $this->hasMany(ArticleShop::class);
+    }
+
+    /**
+     * Relation vers les approbations de l'article
+     * Relation "possède plusieurs" (hasMany)
+     */
+    public function approvals(): HasMany
+    {
+        return $this->hasMany(Approve::class);
+    }
+
+    /**
+     * Relation vers les ventes de l'article
+     * Relation "possède plusieurs" (hasMany)
+     */
+    public function sales(): HasMany
+    {
         return $this->hasMany(Sale::class);
     }
 
-    public function stocks(){
-        return $this->hasMany(Stock::class);
+    /**
+     * Relation "many-to-many" vers les magazines (à travers la table pivot)
+     * Relation "appartient à plusieurs" (belongsToMany)
+     */
+    public function magazines()
+    {
+        return $this->belongsToMany(Magazine::class, 'articles_magazines')
+            ->withPivot('quantity')
+            ->withTimestamps();
     }
 
-    public function supplier(){
-        return $this->belongsTo(Supplier::class);
+    /**
+     * Relation "many-to-many" vers les boutiques (à travers la table pivot)
+     * Relation "appartient à plusieurs" (belongsToMany)
+     */
+    public function shops()
+    {
+        return $this->belongsToMany(Shop::class, 'articles_shop')
+            ->withPivot('quantity')
+            ->withTimestamps();
     }
 }

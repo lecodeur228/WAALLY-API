@@ -2,21 +2,31 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\StateScope;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Scopes\StateScope;
+
 
 class Finance extends Model
 {
-    protected $fillable = ["montant", "type", "motif", "shop_id"];
+     protected $table = 'finances';
 
-    protected static function booted()
+    protected $fillable = [
+        'amount',
+        'type',
+        'motif',
+        // wallet_id sera ajouté par la migration
+    ];
+     protected static function booted()
     {
         static::addGlobalScope(new StateScope());
     }
 
-    public function shop()
+    /**
+     * Relation vers le portefeuille associé
+     * Relation "appartient à" (belongsTo)
+     */
+    public function wallet(): BelongsTo
     {
-        return $this->belongsTo(Shop::class);
+        return $this->belongsTo(Wallet::class);
     }
-
 }

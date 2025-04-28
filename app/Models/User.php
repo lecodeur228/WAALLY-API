@@ -60,12 +60,47 @@ class User extends Authenticatable
         ];
     }
 
-    public function shop(){
-        return $this->hasMany(Shop::class);
+   /**
+     * Relation vers la boutique à laquelle l'utilisateur est associé
+     * Relation "appartient à" (belongsTo)
+     */
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
     }
 
-    public function ventes()
+    /**
+     * Relation vers les boutiques dont l'utilisateur est propriétaire
+     * Relation "possède plusieurs" (hasMany)
+     */
+    public function ownedShops()
     {
-        return $this->hasMany(Sale::class);
+        return $this->hasMany(Shop::class, 'owner_id');
+    }
+
+    /**
+     * Relation vers les fournisseurs dont l'utilisateur est propriétaire
+     * Relation "possède plusieurs" (hasMany)
+     */
+    public function ownedSuppliers()
+    {
+        return $this->hasMany(Supplier::class, 'owner_id');
+    }
+
+    /**
+     * Relation vers les clients dont l'utilisateur est propriétaire
+     * Relation "possède plusieurs" (hasMany)
+     */
+    public function ownedCustomers()
+    {
+        return $this->hasMany(Customer::class, 'owner_id');
+    }
+
+    public function shops()
+    {
+        return $this->belongsToMany(Shop::class)
+                    ->using(ShopUser::class)
+                    ->withPivot('role')
+                    ->withTimestamps();
     }
 }

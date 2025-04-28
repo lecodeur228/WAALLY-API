@@ -6,24 +6,35 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Scopes\StateScope;
 
 
-class Image extends Model
+class ArticleMagazine extends Model
 {
-     protected $fillable = [
-        'image_path',
-        // article_id sera ajouté par la migration
-    ];
+     protected $table = 'articles_magazines';
 
+    protected $fillable = [
+        'quantity',
+        // article_id sera ajouté par la migration
+        // magazine_id sera ajouté par la migration
+    ];
      protected static function booted()
     {
         static::addGlobalScope(new StateScope());
     }
 
     /**
-     * Relation vers l'article associé à l'image
+     * Relation vers l'article associé
      * Relation "appartient à" (belongsTo)
      */
     public function article(): BelongsTo
     {
         return $this->belongsTo(Article::class);
+    }
+
+    /**
+     * Relation vers le magazine associé
+     * Relation "appartient à" (belongsTo)
+     */
+    public function magazine(): BelongsTo
+    {
+        return $this->belongsTo(Magazine::class);
     }
 }

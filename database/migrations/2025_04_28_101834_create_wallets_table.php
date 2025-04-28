@@ -1,11 +1,9 @@
 <?php
 
-use App\Models\Article;
-use App\Models\Boutique;
-use App\Models\Shop;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Shop;
 
 return new class extends Migration
 {
@@ -14,11 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('stocks', function (Blueprint $table) {
+        Schema::create('wallets', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Article::class);
-            $table->foreignIdFor(Shop::class);
-            $table->decimal('quantity', 10, 2);
+            $table->string('name');
+            $table->decimal('balance', 10, 2)->default(0);
+            $table->foreignIdFor(Shop::class)->constrained()->cascadeOnDelete();
+            $table->integer('state')->default(0);
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stocks');
+        Schema::dropIfExists('wallets');
     }
 };

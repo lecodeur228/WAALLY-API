@@ -1,12 +1,9 @@
 <?php
 
-use App\Models\Article;
-use App\Models\Magazin;
-use App\Models\Shop;
-use App\Models\Store;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\User;
 
 return new class extends Migration
 {
@@ -15,11 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inventories', function (Blueprint $table) {
+        Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Store::class);
-            $table->foreignIdFor(Article::class);
-            $table->decimal('quantity', 10, 2);
+            $table->string('nom');
+            $table->string('phone')->nullable();
+            $table->foreignIdFor(User::class, 'owner_id')->constrained('users')->cascadeOnDelete();
+            $table->integer('state')->default(0);
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inventories');
+        Schema::dropIfExists('suppliers');
     }
 };
