@@ -22,6 +22,8 @@ class UserRepository {
             'password' => Hash::make( $data["password"]),
         ]);
 
+       
+
         // Assigner le rôle à l'utilisateur
         $user->assignRole($accountType->value);
 
