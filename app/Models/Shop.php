@@ -11,8 +11,8 @@ class Shop extends Model
 
      protected $fillable = [
         'name',
-        'address',
-        // owner_id sera ajouté par la migration
+        'location',
+        'owner_id',
     ];
 
      protected static function booted()

@@ -12,7 +12,7 @@ class Customer extends Model
      protected $fillable = [
         'name',
         'phone',
-        // owner_id sera ajouté par la migration
+        'owner_id'
     ];
      protected static function booted()
     {

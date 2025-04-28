@@ -5,6 +5,7 @@ use App\Http\Controllers\v1\Api\ShopController;
 use App\Http\Controllers\v1\Api\StoreController;
 use App\Http\Controllers\v1\Api\UserController;
 use App\Http\Controllers\v1\Api\SupplierController;
+use App\Http\Controllers\v1\Api\CustomerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,20 +26,23 @@ Route::middleware('ApiKeyVerify')->prefix('v1')->group(function(){
         Route::get('users/me', [UserController::class, 'getUser']);
 
         Route::prefix('shops')->controller(ShopController::class)->group(function () {
-
             Route::get('/','getShops'); /** good */
-            Route::get('/relatedArticles/{shopId}','getRelatedArticles'); /** good */
-            Route::get('/unrelatedArticles/{shopId}','getUnrelatedArticles'); /** good */
-            Route::get('/relatedStores/{shopId}','getRelatedStores'); /** good */
-            Route::get("/unrelatedStores/{shopId}",'getUnrelatedStores'); /** good */
+            Route::get('/{shopId}','getShop'); /** good */
+            // Route::get('/shopsByUser','getShopsByUser'); /** good */
             Route::post('/create','store'); /** good */
-            Route::post('/addArticles/{shopId}','addArticles'); /** petit problème avec l'article d'id 1 */
-            Route::post('/removeArticles/{shopId}','removeArticles'); /** good */
-            Route::post("/addStores/{shopId}",'addStores');
-            Route::post('/removeStores/{shopId}','removeStores');
             Route::put('/update/{shopId}','update'); /** good */
-            Route::post('/delete/{shopId}','delete'); /** good */
+            Route::delete('delete/{shopId}','delete'); /** good */
+
         });
+
+        Route::prefix('customers')->controller(CustomerController::class)->group(function(){
+            Route::get('/','getCustomers'); /** good */
+            Route::get('/{id}','getCustomer'); /** good */
+            Route::post('/','store'); /** good */
+            Route::put('/update/{id}','update'); /** good */
+            Route::delete('/delete/{id}','delete'); /** good */
+        });
+
 
         Route::prefix('articles')->controller(ArticleController::class)->group(function(){
             Route::get('/{shopId}','getArticles'); /** good */
