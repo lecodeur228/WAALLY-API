@@ -11,7 +11,7 @@ class Wallet extends Model
      protected $fillable = [
         'name',
         'balance',
-        // shop_id sera ajouté par la migration
+        'shop_id',
     ];
 
      protected static function booted()

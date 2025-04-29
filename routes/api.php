@@ -8,6 +8,10 @@ use App\Http\Controllers\v1\Api\SupplierController;
 use App\Http\Controllers\v1\Api\CustomerController;
 use App\Http\Controllers\v1\Api\MagazinController;
 use App\Http\Controllers\v1\Api\ApprovController;
+use App\Http\Controllers\v1\Api\WalletController;
+use App\Http\Controllers\v1\Api\FinanceController;
+use App\Http\Controllers\v1\Api\SaleController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -87,6 +91,27 @@ Route::middleware('ApiKeyVerify')->prefix('v1')->group(function(){
             Route::get('/shops/{shopId}','getApprovs'); /** good */
             Route::post('/','store'); /** good */
             Route::delete('/delete/{id}','delete'); /** good */
+        });
+
+        Route::prefix('wallets')->controller(WalletController::class)->group(function(){
+            Route::get('/shops/{shopId}','getWallets'); /** good */
+            Route::get('/{id}','getWallet'); /** good */
+            Route::post('/','store'); /** good */
+            Route::put('/update/{id}','update'); /** good */
+            Route::delete('/delete/{id}','delete'); /** good */
+        });
+
+        Route::prefix('finances')->controller(FinanceController::class)->group(function(){
+            Route::get('/wallet/{walletId}','getFinances'); /** good */
+            Route::get('/{id}','getFinance'); /** good */
+            Route::post('/','store'); /** good */
+            Route::delete('/delete/{id}','delete'); /** good */
+        });
+
+        Route::prefix('sales')->controller(SaleController::class)->group(function(){
+            Route::get('/shops/{shopId}','getSales'); /** good */
+            Route::post('/','store'); /** good */
+            Route::delete('/delete/{saleId}','delete'); /** good */
         });
     });
 });

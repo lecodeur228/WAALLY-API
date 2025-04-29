@@ -17,12 +17,18 @@ class ApprovController extends Controller
 
     public function getApprovs($shopId)
     {
+         if(!Auth::user()->can('view magazines')){
+            return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to view magazines.');
+        }
         $approvals = $this->approvalService->getApprovals($shopId);
         return response()->json($approvals);
     }
 
     public function store(Request $request)
     {
+        if(!Auth::user()->can('create approvs')){
+            return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to create approvs.');
+        }
        $validator = Validator::make($request->all(), [
             'article_id' => 'required|integer|exists:articles,id',
             'shop_id' => 'required|integer|exists:shops,id',
@@ -48,6 +54,9 @@ class ApprovController extends Controller
 
     public function delete($id)
     {
+        if(!Auth::user()->can('delete approvs')){
+            return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to delete approvs.');
+        }
         $response = $this->approvalService->delete($id);
         if($response['status']){
             return ApiResponse::success($response,'Approval deleted successfully',200);

@@ -85,6 +85,16 @@ class CreateDefaultRolesAndPermissions extends Command
             'update magazines',
             'delete magazines',
             'view magazines',
+            // manage approvs
+            'create approvs',
+            'update approvs',
+            'delete approvs',
+            'view approvs',
+            // manage wallet
+            'create wallet',
+            'update wallet',
+            'delete wallet',
+            'view wallet',
         ];
 
           // Créer les rôles
@@ -157,10 +167,15 @@ class CreateDefaultRolesAndPermissions extends Command
             'update magazines',
             'delete magazines',
             'view magazines',
-            ]
-          );
-          $sellerRole = Role::findByName('seller');
-          $sellerRole->givePermissionTo(
+            // manage wallets
+            'create wallets',
+            'update wallets',
+            'delete wallets',
+            'view wallets',
+            ]);
+
+        $sellerRole = Role::findByName('seller');
+        $sellerRole->givePermissionTo(
             [
             //"manage vente"
             'create sale',
@@ -168,9 +183,9 @@ class CreateDefaultRolesAndPermissions extends Command
             'delete sale',
             'view sale'
             ]
-          );
+        );
 
-          $this->info('Rôles et permissions créés avec succès.');
+        $this->info('Rôles et permissions créés avec succès.');
 
     }
 }

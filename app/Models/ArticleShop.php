@@ -12,8 +12,8 @@ class ArticleShop extends Model
 
     protected $fillable = [
         'quantity',
-        // article_id sera ajouté par la migration
-        // shop_id sera ajouté par la migration
+         'article_id',
+         'shop_id',
     ];
      protected static function booted()
     {
