@@ -10,7 +10,7 @@ class Supplier extends Model
      protected $fillable = [
         'nom',
         'phone',
-        // owner_id sera ajouté par la migration
+        'owner_id'
     ];
 
      protected static function booted()

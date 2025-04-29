@@ -43,7 +43,7 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'nom' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
         ]);
 
@@ -55,13 +55,13 @@ class SupplierController extends Controller
 
         $response = $this->supplierService->create($validatedData);
 
-        return ApiResponse::success($response,'Supplier created successfully',200);
+        return ApiResponse::success($response,'Supplier created successfully',201);
     }
 
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'nom' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
         ]);
 

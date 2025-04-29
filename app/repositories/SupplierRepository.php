@@ -12,25 +12,25 @@ class SupplierRepository
 {
     public function getAll()
     {
-        return Supplier::all();
+        return Supplier::where('owner_id', Auth::user()->id)->get();
     }
 
     public function getById($id)
     {
-        return Supplier::find($id);
+        return Supplier::where('owner_id', Auth::user()->id)->find($id);
     }
 
     public function getByName($name)
     {
-        return Supplier::where('name', $name)->first();
+        return Supplier::where('owner_id', Auth::user()->id)->where('name', $name)->first();
 
     }
-    public function create($data)
+    public function create(array $data)
     {
-        $data['user_id'] = Auth::user()->id;
+        $data['owner_id'] = Auth::user()->id;
         return Supplier::create($data);
     }
-    public function update($id, $data)
+    public function update(array $data, $id)
     {
         $supplier = Supplier::find($id);
         if ($supplier) {

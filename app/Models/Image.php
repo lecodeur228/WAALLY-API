@@ -10,7 +10,7 @@ class Image extends Model
 {
      protected $fillable = [
         'image_path',
-        // article_id sera ajouté par la migration
+        'article_id'
     ];
 
      protected static function booted()

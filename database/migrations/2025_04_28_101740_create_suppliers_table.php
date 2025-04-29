@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
+            $table->string('name');
             $table->string('phone')->nullable();
             $table->foreignIdFor(User::class, 'owner_id')->constrained('users')->cascadeOnDelete();
             $table->integer('state')->default(0);

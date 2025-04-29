@@ -45,10 +45,6 @@ class SupplierService
         return $this->supplierRepository->delete($id);
     }
 
-    public function getAllByUserId($userId)
-    {
-        return $this->supplierRepository->getAllByUserId($userId);
-    }
 
     public function deleteByUserId($userId)
     {

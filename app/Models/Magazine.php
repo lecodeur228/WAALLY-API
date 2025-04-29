@@ -11,7 +11,7 @@ class Magazine extends Model
      protected $fillable = [
         'name',
         'description',
-        // shop_id sera ajouté par la migration
+        'shop_id'
     ];
 
      protected static function booted()

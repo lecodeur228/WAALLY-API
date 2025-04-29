@@ -12,8 +12,8 @@ class ArticleMagazine extends Model
 
     protected $fillable = [
         'quantity',
-        // article_id sera ajouté par la migration
-        // magazine_id sera ajouté par la migration
+        'article_id',
+        'magazine_id'
     ];
      protected static function booted()
     {

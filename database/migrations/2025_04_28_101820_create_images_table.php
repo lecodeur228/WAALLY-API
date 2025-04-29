@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(Article::class)->constrained()->cascadeOnDelete();
             $table->string('image_path');
             $table->integer('state')->default(0);
+            $table->boolean('is_primary');
             $table->timestamps();
         });
     }

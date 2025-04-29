@@ -80,6 +80,11 @@ class CreateDefaultRolesAndPermissions extends Command
             'update customer',
             'delete customer',
             'view customer',
+            // manage magazines
+            'create magazines',
+            'update magazines',
+            'delete magazines',
+            'view magazines',
         ];
 
           // Créer les rôles
@@ -147,6 +152,11 @@ class CreateDefaultRolesAndPermissions extends Command
             'update customer',
             'delete customer',
             'view customer',
+            //manage magazines
+            'create magazines',
+            'update magazines',
+            'delete magazines',
+            'view magazines',
             ]
           );
           $sellerRole = Role::findByName('seller');

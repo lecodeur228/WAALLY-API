@@ -3,49 +3,42 @@
 namespace App\Services;
 
 use App\repositories\ArticleRepository;
+use App\repositories\ImageRepository;
 
 class ArticleService {
 
     protected $articleRepository;
+    protected $imageRepository;
 
-    public function __construct(ArticleRepository $articleRepository)
+    public function __construct(ArticleRepository $articleRepository, ImageRepository $imageRepository)
     {
         $this->articleRepository = $articleRepository;
+        $this->imageRepository = $imageRepository;
     }
 
-    public function getArticles($id) {
+    public function getArticles() {
 
-        return $this->articleRepository->getArticles($id);
-
-    }
-
-    public function getRelatedShops($id){
-
-        return $this->articleRepository->getRelatedShops($id);
+        return $this->articleRepository->getArticles();
 
     }
 
-    public function getUnrelatedShops($articleId){
 
-        return $this->articleRepository->getUnrelatedShops($articleId);
-    }
 
-    public function store($data , $shopIds) {
 
-        return $this->articleRepository->store($data,$shopIds);
+    public function store($data) {
 
-    }
-
-    public function addToshops($articleId , $shopIds) {
-
-        return $this->articleRepository->addToShops($articleId , $shopIds);
+        $article = $this->articleRepository->store($data);
+        $this->imageRepository->uploadImage($data['images'], $article->id);
+        return $article;
 
     }
 
-    public function removeFromShops($articleId , $shopIds) {
-
-        return $this->articleRepository->removeFromShops($articleId , $shopIds);
+    public function addImagesToArticle($data , $id) {
+        $this->imageRepository->uploadImage($data['images'], $id);
+        return true;
     }
+
+
 
 
 
@@ -57,7 +50,10 @@ class ArticleService {
 
     public function delete($id){
 
-        return $this->articleRepository->delete($id);
-
+        $article = $this->articleRepository->delete($id);
+        foreach ($article->images as $image) {
+            $this->imageRepository->deleteImage($image->id);
+        }
+        return $article;
     }
 }

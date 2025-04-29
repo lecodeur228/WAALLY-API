@@ -22,7 +22,7 @@ class ArticleController extends Controller
         $this->articleService = $articleService;
     }
 
-    /**public function getArticles($shopId){
+    public function getArticles(){
 
         // Vérifier si l'utilisateur a la permission de 'view article'
 
@@ -30,23 +30,12 @@ class ArticleController extends Controller
             return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to view articles.');
         }
 
-        $response = $this->articleService->getArticles($shopId);
+        $response = $this->articleService->getArticles();
 
         return ApiResponse::success($response , 'Articles retrieved successfully' , 200);
-    } */
-
-    public function getRelatedShops($id){
-
-        // Vérifier si l'utilisateur a la permission de 'view article'
-
-        if(!Auth::user()->can('view articles')){
-            return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to view shop.');
-        }
-
-        $response = $this->articleService->getRelatedShops($id);
-
-        return ApiResponse::success($response , 'Shop retrieved successfully' , 200);
     }
+
+
 
     public function store(Request $request){
 
@@ -60,11 +49,12 @@ class ArticleController extends Controller
         $validator = Validator::make($request->all(),
         [
             "name"=> 'required|string|max:255',
-            "description" => 'required|string|max:255',
+            "description" => 'string|max:255',
             "sale_price" => 'required|numeric|max_digits:10|min_digits:2',
-            "buy_price" => 'required|numeric|max_digits:10|min_digits:2',
-            "shop_id" => 'required|array|min:1',
-            "shop_id.*" => 'required|integer|exists:shops,id'
+            "purchase_price" => 'required|numeric|max_digits:10|min_digits:2',
+            "supplier_id" => 'required|integer|exists:suppliers,id',
+            "images" => 'required|array|min:1',
+            "images.*" => 'image|mimes:jpeg,png,jpg'
         ]);
 
         // Retourner les erreurs de validation si elles existent
@@ -75,85 +65,31 @@ class ArticleController extends Controller
 
         $validatedData = $validator->validated();
 
-        // Ajouter l'id du shop
-        //$validatedData["shop_id"] = $shopId;
-
-        $validatedDataWithoutShop['name'] = $validatedData['name'];
-        $validatedDataWithoutShop['description'] = $validatedData['description'];
-        $validatedDataWithoutShop['sale_price'] = $validatedData['sale_price'];
-        $validatedDataWithoutShop['buy_price'] = $validatedData['buy_price'];
-
-        $shopIds = $validatedData['shop_id'];
-
-        $response = $this->articleService->store($validatedDataWithoutShop , $shopIds);
+        $response = $this->articleService->store($validatedData);
 
         return ApiResponse::success($response , 'Article created succesfully ' , 201);
 
     }
 
-    public function addToshops(Request $request,$articelId){
-
-        // Vérifier si l'utilisateur a la permision 'update Artciles'
-        if(!Auth::user()->can('update articles')){
-            return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to update articles.');
-        }
-
-        // valider les données
-        $validator = Validator::make($request->all(),
-        [
-            "shop_id"=> 'required|array|min:1',
-            "shop_id.*" => 'required|integer|exists:shops,id'
-        ]);
-
-        // Retourner les erreurs de validation si elles existent
-
-        if($validator->fails()){
-            return ApiResponse::error('Validation error' , 422 , $validator->errors());
-        }
-
-        $validatedData = $validator->validated();
-        $shopIds = $validatedData['shop_id'];
-        $response = $this->articleService->addToshops($articelId , $shopIds);
-
-        return ApiResponse::success($response , 'Article added succesfully to shops' , 200);
-    }
-
-    public function removeFromShop(Request $request,$articelId){
-
+    public function addImages(Request $request, $id){
         // Vérifier si l'utilisateur a la permision 'update Artciles'
         if(!Auth::user()->can('update articles')){
             return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to update articles.');
         }
         // valider les données
-        $validator = Validator::make($request->all(),
-        [
-            "shop_id"=> 'required|array|min:1',
-            "shop_id.*" => 'required|integer|exists:shops,id'
+        $validator = Validator::make($request->all(), [
+            'images' => 'required|array|min:1',
+            'images.*' => 'image|mimes:jpeg,png,jpg'
         ]);
         // Retourner les erreurs de validation si elles existent
-
         if($validator->fails()){
             return ApiResponse::error('Validation error' , 422 , $validator->errors());
         }
-
         $validatedData = $validator->validated();
-        $shopIds = $validatedData['shop_id'];
-        $response = $this->articleService->removeFromShops($articelId , $shopIds);
-
-        return ApiResponse::success($response , 'Article removed succesfully from shops' , 200);
+         $this->articleService->addImagesToArticle($validatedData , $id);
+        return ApiResponse::success( 'Article updated succesfully ' , 200);
     }
 
-    public function getUnrelatedShops($articelId){
-
-        // Vérifier si l'utilisateur a la permision 'view articles'
-        if(!Auth::user()->can('view articles')){
-            return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to view articles.');
-        }
-
-        $response = $this->articleService->getUnrelatedShops($articelId);
-
-        return ApiResponse::success($response , 'Shops retrieved successfully' , 200);
-    }
 
     public function update(Request $request, $id){
          // Vérifier si l'utilisateur a la permision 'update Artciles'
@@ -168,7 +104,7 @@ class ArticleController extends Controller
             "name"=> 'required|string|max:255',
             "description" => 'required|string|max:255',
             "sale_price" => 'required|numeric|max_digits:10|min_digits:2',
-            "buy_price" => 'required|numeric|max_digits:10|min_digits:2',
+            "purchase_price" => 'required|numeric|max_digits:10|min_digits:2',
         ]);
 
         // Retourner les erreurs de validation si elles existent

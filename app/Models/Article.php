@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Scopes\StateScope;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 
 class Article extends Model
@@ -13,8 +16,8 @@ class Article extends Model
         'description',
         'sale_price',
         'purchase_price',
-        // supplier_id sera ajouté par la migration
-        // owner_id sera ajouté par la migration
+        'supplier_id',
+        'owner_id',
     ];
 
      protected static function booted()

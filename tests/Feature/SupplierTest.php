@@ -6,28 +6,32 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class ShopTest extends TestCase
+class SupplierTest extends TestCase
 {
     //  use RefreshDatabase; // Vide la base après chaque test
 
     /** @test */
-    public function user_can_create_shop()
+    public function user_can_create_supplier()
     {
-        $response = $this->postJson('/api/v1/shops/create', [
-            'name' => 'Test Shop',
-            'location' => '{"latitude": 0, "longitude": 0}',
+        $response = $this->postJson('/api/v1/suppliers', [
+            'name' => 'Test Supplier',
+            'phone' =>  '0612345678',
         ],[
             'x-api-key' => 'nQZNySDKQoNb8bMi7fyIhuZNArMqt8whpK7EAqpMvrWvswJXWyaNGKwbLCZud2N9',
             'Authorization' => '1|s2jEnAPfomWQJ6otmFSrDFkPr9tJM3Y7pigeI1YLefc66cb6'
         ]);
-        // dd($response);
+
         $response->assertStatus(201); // Code 201 = Created
+        $this->assertDatabaseHas('suppliers', [
+            'name' => 'Test Supplier',
+            'phone' => '0612345678',
+        ]);
     }
 
     /** @test */
-    public function user_can_get_shops()
+    public function user_can_get_suppliers()
     {
-        $response = $this->getJson('/api/v1/shops',[
+        $response = $this->getJson('/api/v1/suppliers',[
             'x-api-key' => 'nQZNySDKQoNb8bMi7fyIhuZNArMqt8whpK7EAqpMvrWvswJXWyaNGKwbLCZud2N9',
             'Authorization' => '1|s2jEnAPfomWQJ6otmFSrDFkPr9tJM3Y7pigeI1YLefc66cb6'
         ]);
@@ -36,9 +40,9 @@ class ShopTest extends TestCase
     }
 
     /** @test */
-    public function user_can_get_shop()
+    public function user_can_get_supplier()
     {
-        $response = $this->getJson('/api/v1/shops/1',[
+        $response = $this->getJson('/api/v1/suppliers/1',[
             'x-api-key' => 'nQZNySDKQoNb8bMi7fyIhuZNArMqt8whpK7EAqpMvrWvswJXWyaNGKwbLCZud2N9',
             'Authorization' => '1|s2jEnAPfomWQJ6otmFSrDFkPr9tJM3Y7pigeI1YLefc66cb6'
         ]);
@@ -47,22 +51,11 @@ class ShopTest extends TestCase
     }
 
     /** @test */
-    public function user_can_get_shops_by_user()
+    public function user_can_update_supplier()
     {
-        $response = $this->getJson('/api/v1/shops/shopsByUser',[
-            'x-api-key' => 'nQZNySDKQoNb8bMi7fyIhuZNArMqt8whpK7EAqpMvrWvswJXWyaNGKwbLCZud2N9',
-            'Authorization' => '1|s2jEnAPfomWQJ6otmFSrDFkPr9tJM3Y7pigeI1YLefc66cb6'
-        ]);
-
-        $response->assertStatus(200); // Code 200 = OK
-    }
-
-    /** @test */
-    public function user_can_update_shop()
-    {
-        $response = $this->putJson('/api/v1/shops/update/1', [
-            'name' => 'Test Shop',
-            'location' => '{"latitude": 0, "longitude": 0}',
+        $response = $this->putJson('/api/v1/suppliers/update/1', [
+            'name' => 'Test Supplier',
+            'phone' =>  '0612345678',
         ],[
             'x-api-key' => 'nQZNySDKQoNb8bMi7fyIhuZNArMqt8whpK7EAqpMvrWvswJXWyaNGKwbLCZud2N9',
             'Authorization' => '1|s2jEnAPfomWQJ6otmFSrDFkPr9tJM3Y7pigeI1YLefc66cb6'
@@ -72,12 +65,9 @@ class ShopTest extends TestCase
     }
 
     /** @test */
-    public function user_can_delete_shop()
+    public function user_can_delete_supplier()
     {
-        $response = $this->deleteJson('/api/v1/shops/delete/1',[
-            'x-api-key' => 'nQZNySDKQoNb8bMi7fyIhuZNArMqt8whpK7EAqpMvrWvswJXWyaNGKwbLCZud2N9',
-            'Authorization' => '1|s2jEnAPfomWQJ6otmFSrDFkPr9tJM3Y7pigeI1YLefc66cb6'
-        ]);
+        $response = $this->deleteJson('/api/v1/suppliers/delete/1');
 
         $response->assertStatus(200); // Code 200 = OK
     }
