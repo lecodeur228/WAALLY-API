@@ -1,10 +1,19 @@
-# Utilisation de PHP 8.2 avec FPM
+# Étape 1 : Construction de l'application avec Composer
+FROM composer:2 as build
+
+WORKDIR /app
+
+# Copier les fichiers nécessaires pour l'installation
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader
+
+# Copier le reste du projet
+COPY . .
+
+# Étape 2 : Image finale PHP avec FPM
 FROM php:8.2-fpm
 
-# Arguments pour la configuration d'environnement
-ARG ENV=production
-
-# Installation des dépendances système
+# Installation des dépendances système nécessaires
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -14,41 +23,24 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     libpq-dev \
-    nodejs \
-    npm
+ && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd \
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Installer les extensions PHP nécessaires
-RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
-
-# Installer Composer
+# Copier Composer depuis l'image Composer officielle
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Définir le répertoire de travail
-WORKDIR /var/app/prod/wally-app
+WORKDIR /var/www
 
-# Copier les fichiers du projet
-COPY . /var/app/prod/wally-app/
-
-# Installation des dépendances Composer
-RUN composer install --no-dev --optimize-autoloader
-
-COPY .env.example .env
-
-# Générer la clé Laravel
-RUN php artisan key:generate
-
-# Créer le lien symbolique storage
-RUN php artisan storage:link
+# Copier l'application depuis l'étape build
+COPY --from=build /app /var/www
 
 # Configuration des permissions
-RUN chown -R www-data:www-data /var/app/prod/wally-app \
-    && chmod -R 755 /var/app/prod/wally-app/public/storage
+RUN chown -R www-data:www-data /var/www \
+ && chmod -R 755 /var/www/storage
 
-# Optimiser pour la production si nécessaire
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache
-
+# Port exposé
 EXPOSE 9000
 
+# Commande de démarrage
 CMD ["php-fpm"]
