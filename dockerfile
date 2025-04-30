@@ -35,6 +35,8 @@ RUN composer install --no-dev --optimize-autoloader
 # Installation des dépendances NPM (si nécessaire)
 RUN npm install && npm run build
 
+COPY .env.example .env
+
 # Générer la clé Laravel
 RUN php artisan key:generate
 
