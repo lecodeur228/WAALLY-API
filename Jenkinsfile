@@ -47,8 +47,6 @@ pipeline {
                             docker rm \$CONTAINER_ID
                         fi
 
-                       
-
                         echo "🛠 Stopping old containers.."
                         docker-compose -f $DEPLOY_PATH/docker-compose.yml down || true
 
