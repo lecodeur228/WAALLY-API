@@ -3,20 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Scopes\StateScope;
-
 
 class Sale extends Model
 {
-      protected $fillable = [
+    protected $fillable = [
         'quantity',
         'total_price',
-        // article_id sera ajouté par la migration
-        // shop_id sera ajouté par la migration
-        // invoice_id sera ajouté par la migration
+        'article_id' ,
+        'shop_id' ,
+        'invoice_id',
+        'sale_price',
+        'seller_id',
+        'customer_id',
     ];
 
-     protected static function booted()
+    protected static function booted()
     {
         static::addGlobalScope(new StateScope());
     }
@@ -46,5 +49,15 @@ class Sale extends Model
     public function invoice(): BelongsTo
     {
         return $this->belongsTo(Invoice::class);
+    }
+
+    public function seller(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

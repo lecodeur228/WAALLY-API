@@ -8,7 +8,6 @@ use App\Models\Scopes\StateScope;
 
 class ArticleShop extends Model
 {
-    protected $table = 'articles_shop';
 
     protected $fillable = [
         'quantity',

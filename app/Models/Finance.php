@@ -14,7 +14,7 @@ class Finance extends Model
         'amount',
         'type',
         'motif',
-        // wallet_id sera ajouté par la migration
+        'wallet_id'
     ];
      protected static function booted()
     {

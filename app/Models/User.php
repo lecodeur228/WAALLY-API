@@ -103,4 +103,9 @@ class User extends Authenticatable
                     ->withPivot('role')
                     ->withTimestamps();
     }
+
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
+    }
 }

@@ -4,31 +4,35 @@ namespace App\Http\Controllers\v1\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Services\ApprovService;
+use Illuminate\Support\Facades\Auth;
+use App\Helpers\ApiResponse;
+use Illuminate\Support\Facades\Validator;
 
 class ApprovController extends Controller
 {
     //
     protected $approvalService;
 
-    public function __construct()
+    public function __construct(ApprovService $approvalService)
     {
         $this->approvalService = $approvalService;
     }
 
     public function getApprovs($shopId)
     {
-         if(!Auth::user()->can('view magazines')){
-            return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to view magazines.');
-        }
+        //  if(!Auth::user()->can('view approvs')){
+        //     return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to view magazines.');
+        // }
         $approvals = $this->approvalService->getApprovals($shopId);
-        return response()->json($approvals);
+        return ApiResponse::success($approvals,'Approvs retrieved successfully',200);
     }
 
     public function store(Request $request)
     {
-        if(!Auth::user()->can('create approvs')){
-            return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to create approvs.');
-        }
+        // if(!Auth::user()->can('create approvs')){
+        //     return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to create approvs.');
+        // }
        $validator = Validator::make($request->all(), [
             'article_id' => 'required|integer|exists:articles,id',
             'shop_id' => 'required|integer|exists:shops,id',
@@ -54,9 +58,9 @@ class ApprovController extends Controller
 
     public function delete($id)
     {
-        if(!Auth::user()->can('delete approvs')){
-            return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to delete approvs.');
-        }
+        // if(!Auth::user()->can('delete approvs')){
+        //     return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to delete approvs.');
+        // }
         $response = $this->approvalService->delete($id);
         if($response['status']){
             return ApiResponse::success($response,'Approval deleted successfully',200);

@@ -19,7 +19,8 @@ return new class extends Migration
             $table->foreignIdFor(Article::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Shop::class)->constrained()->cascadeOnDelete();
             $table->integer('quantity');
-            $table->decimal('total_price', 10, 2);$table->foreignIdFor(Invoice::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->decimal('total_price', 10, 2);
+            $table->foreignIdFor(Invoice::class)->nullable()->constrained()->cascadeOnDelete();
             $table->integer('state')->default(0);
             $table->timestamps();
         });

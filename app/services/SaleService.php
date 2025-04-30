@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
-use App\repositories\SalesRepository;
+use App\repositories\SaleRepository;
 
 class SaleService {
     protected $saleRepository;
-    public function __construct(SalesRepository $saleRepository)
+    public function __construct(SaleRepository $saleRepository)
     {
         $this->saleRepository = $saleRepository;
     }

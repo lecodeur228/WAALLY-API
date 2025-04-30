@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Finance;
+use App\Models\Wallet;
 
 class FinanceRepository {
 
@@ -18,10 +19,10 @@ class FinanceRepository {
         $finance = Finance::create($data);
         $wallet = Wallet::find($data['wallet_id']);
         if($data['type'] == 'deposit'){
-            $wallet->balance += $data['balance'];
+            $wallet->balance += $data['amount'];
         }
         if($data['type'] == 'withdrawal'){
-            $wallet->balance -= $data['balance'];
+            $wallet->balance -= $data['amount'];
         }
         $wallet->save();
         return $finance;
@@ -35,10 +36,10 @@ class FinanceRepository {
         $finance->save();
         $wallet = Wallet::find($finance->wallet_id);
         if($finance->type == 'deposit'){
-            $wallet->balance -= $finance->balance;
+            $wallet->balance -= $finance->amount;
         }
         if($finance->type == 'withdrawal'){
-            $wallet->balance += $finance->balance;
+            $wallet->balance += $finance->amount;
         }
         $wallet->save();
         return $finance;

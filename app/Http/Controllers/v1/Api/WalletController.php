@@ -58,9 +58,9 @@ class WalletController extends Controller
 
 
     public function update(Request $request,$id){
-        if(!Auth::user()->can('update wallets')){
-            return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to update wallet.');
-        }
+        // if(!Auth::user()->can('update wallets')){
+        //     return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to update wallet.');
+        // }
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'balance' => 'required|numeric',

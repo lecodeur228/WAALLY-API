@@ -2,12 +2,18 @@
 
 namespace App\Repositories;
 
-class SalesRepository {
+use App\models\Sale;
+use App\models\ArticleShop;
+use Illuminate\Support\Facades\Auth;
+
+
+
+class SaleRepository {
 
 
     public function getSales($shopId)
     {
-         Sale::where('shop_id', $shopId)->get();
+      return  Sale::with('article', 'customer', 'seller')->where('shop_id', $shopId)->get();
     }
 
     public function store(array $data){
@@ -17,14 +23,21 @@ class SalesRepository {
             if($data['quantity'] >= $articleShop->quantity){
                 $articleShop->quantity -= $data['quantity'];
                 $articleShop->save();
-                $data['article_shop_id'] = $articleShop->id;
-                $data['total_price'] = $articleShop->article()->purchase_price * $data['quantity'];
+                $data['article_id'] = $articleShop->article_id;
+                $data['shop_id'] = $articleShop->shop_id;
+               
                 $data['seller_id'] = Auth::user()->id;
-
-            Sale::create($data);
+            $sale = Sale::create($data);
+            if($data['generateInvoice'])
+            {
+               $invoice = InvoiceRepository::generatePDF($sale->id);
+               $sale->invoice_id = $invoice['data']['id'];
+               $sale->save();
+            }
             return [
                 'status' => true,
-                'message' => 'Sales added successfully'
+                'message' => 'Sales added successfully',
+                'data' => $sale
             ];
         }else {
             return [

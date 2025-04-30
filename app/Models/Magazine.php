@@ -47,4 +47,9 @@ class Magazine extends Model
             ->withPivot('quantity')
             ->withTimestamps();
     }
+
+    public function approvs() : HasMany
+    {
+        return $this->hasMany(Approv::class);
+    }
 }

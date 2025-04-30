@@ -4,6 +4,10 @@ namespace App\Http\Controllers\v1\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Services\SaleService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use App\Helpers\ApiResponse;
 
 class SaleController extends Controller
 {
@@ -16,21 +20,25 @@ class SaleController extends Controller
 
     public function getSales($shopId)
     {
-        if(!Auth::user()->can('view sale')){
-            return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to view sale.');
-        }
+        // if(!Auth::user()->can('view sale')){
+        //     return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to view sale.');
+        // }
         $sales = $this->saleService->getSales($shopId);
         return ApiResponse::success($sales,'Sales retrieved successfully',200);
     }
 
     public function store(Request $request)
     {
-        if(!Auth::user()->can('create sale')){
-            return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to create sale.');
-        }
+        // if(!Auth::user()->can('create sale')){
+        //     return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to create sale.');
+        // }
         $validator = Validator::make($request->all(), [
             'article_shop_id' => 'required|integer|exists:article_shops,id',
             'quantity' => 'required|integer',
+            'customer_id' => 'required|integer|exists:customers,id',
+            'sale_price' => 'required|numeric',
+            'generateInvoice' => 'required|boolean',
+
         ]);
 
         // Retourner les erreurs de validation si elles existent
@@ -49,9 +57,9 @@ class SaleController extends Controller
 
     public function delete($saleId)
     {
-        if(!Auth::user()->can('delete sale')){
-            return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to delete sale.');
-        }
+        // if(!Auth::user()->can('delete sale')){
+        //     return ApiResponse::error('Unauthorized' , 403 , 'You do not have permission to delete sale.');
+        // }
         $response = $this->saleService->delete($saleId);
 
       if($response['status']){

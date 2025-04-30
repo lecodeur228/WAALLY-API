@@ -36,4 +36,13 @@ class Customer extends Model
     {
         return $this->hasMany(Invoice::class);
     }
+
+    /**
+     * Relation vers les ventes du client
+     * Relation "possède plusieurs" (hasMany)
+     */
+    public function sales(): HasMany
+    {
+        return $this->hasMany(Sale::class);
+    }
 }

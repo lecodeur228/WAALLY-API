@@ -47,12 +47,12 @@ pipeline {
                             docker rm \$CONTAINER_ID
                         fi
 
-                        echo "🛠 Vérification du fichier .env"
-                        if [ ! -f "$DEPLOY_PATH/.env" ]; then
-                            echo "🚀 Création d'un fichier .env vide..."
-                            touch $DEPLOY_PATH/.env
-                            cp $DEPLOY_PATH/.env.example $DEPLOY_PATH/.env
-                        fi
+                        // echo "🛠 Vérification du fichier .env"
+                        // if [ ! -f "$DEPLOY_PATH/.env" ]; then
+                        //     echo "🚀 Création d'un fichier .env vide..."
+                        //     touch $DEPLOY_PATH/.env
+                        //     cp $DEPLOY_PATH/.env.example $DEPLOY_PATH/.env
+                        // fi
 
                         echo "🛠 Stopping old containers.."
                         docker-compose -f $DEPLOY_PATH/docker-compose.yml down || true

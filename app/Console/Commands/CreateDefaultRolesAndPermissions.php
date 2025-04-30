@@ -172,6 +172,11 @@ class CreateDefaultRolesAndPermissions extends Command
             'update wallets',
             'delete wallets',
             'view wallets',
+            // manage approvs
+            'create approvs',
+            'update approvs',
+            'delete approvs',            
+            'view approvs', 
             ]);
 
         $sellerRole = Role::findByName('seller');

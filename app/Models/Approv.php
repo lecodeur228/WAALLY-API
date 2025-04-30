@@ -9,10 +9,11 @@ use App\Models\Scopes\StateScope;
 class Approv extends Model
 {
      protected $fillable = [
-        'quantite',
+        'quantity',
         'type',
         'article_id',
-        'shop_id'
+        'shop_id',
+        'magazine_id'
     ];
 
      protected static function booted()
@@ -36,5 +37,10 @@ class Approv extends Model
     public function shop(): BelongsTo
     {
         return $this->belongsTo(Shop::class);
+    }
+
+    public function magazine(): BelongsTo
+    {
+        return $this->belongsTo(Magazine::class);
     }
 }
