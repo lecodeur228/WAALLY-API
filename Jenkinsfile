@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker build --no-cache -t $IMAGE_NAME .'
-                    withDockerRegistry([credentialsId: 'github-token', url: 'https://ghcr.io']) {
+                    withDockerRegistry([credentialsId: 'github_token', url: 'https://ghcr.io']) {
                         sh 'docker push $IMAGE_NAME'
                     }
                 }
