@@ -40,6 +40,9 @@ COPY .env.example .env
 # Générer la clé Laravel
 RUN php artisan key:generate
 
+# Créer le lien symbolique storage
+RUN php artisan storage:link
+
 # Configuration des permissions
 RUN chown -R www-data:www-data /var/app/prod/wally-app \
     && chmod -R 755 /var/app/prod/wally-app/public/storage
