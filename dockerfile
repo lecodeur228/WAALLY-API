@@ -32,9 +32,6 @@ COPY . /var/app/prod/wally-app/
 # Installation des dépendances Composer
 RUN composer install --no-dev --optimize-autoloader
 
-# Installation des dépendances NPM (si nécessaire)
-RUN npm install && npm run build
-
 COPY .env.example .env
 
 # Générer la clé Laravel
