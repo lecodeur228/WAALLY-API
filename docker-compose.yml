@@ -27,7 +27,7 @@ services:
     ports:
       - "9010:80" # Port 9010 du VPS mappé vers le port 80 du conteneur Nginx
     volumes:
-      - ./:/var/www/html
+      - .:/var/app/prod/wally-app
       - ./docker/nginx/conf.d:/etc/nginx/conf.d
     networks:
       - wally-network
