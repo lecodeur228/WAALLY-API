@@ -14,11 +14,22 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     libpq-dev \
+    libzip-dev \
+    libicu-dev \
     nodejs \
     npm
 
 # Installer les extensions PHP nécessaires
-RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-install \
+    pdo \
+    pdo_mysql \
+    mbstring \
+    exif \
+    pcntl \
+    bcmath \
+    gd \
+    zip \
+    intl
 
 # Installer Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -32,7 +43,7 @@ COPY . /var/app/prod/wally-app/
 # Installation des dépendances Composer
 RUN composer install --no-dev --optimize-autoloader --verbose
 
-
+# Copier le fichier d'environnement
 COPY .env.example .env
 
 # Générer la clé Laravel
@@ -45,7 +56,7 @@ RUN php artisan storage:link
 RUN chown -R www-data:www-data /var/app/prod/wally-app \
     && chmod -R 755 /var/app/prod/wally-app/public/storage
 
-# Optimiser pour la production si nécessaire
+# Optimiser pour la production
 RUN php artisan config:cache && \
     php artisan route:cache && \
     php artisan view:cache
