@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Service de l'application Laravel (PHP-FPM)
   app:
