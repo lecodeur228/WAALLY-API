@@ -61,7 +61,7 @@ pipeline {
                             docker compose up -d --force-recreate --build
 
                             echo "✅ Déploiement terminé avec succès !"
-                            EOF
+EOF
                         """
                     }
                 }
