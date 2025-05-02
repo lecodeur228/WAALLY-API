@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Service de l'application Laravel
+  # Service de l'application Laravel (PHP-FPM)
   app:
     build:
       context: .
@@ -25,7 +25,7 @@ services:
     container_name: wally-nginx
     restart: unless-stopped
     ports:
-      - "${APP_PORT:-80}:80"
+      - "9010:80" # Port 9010 du VPS mappé vers le port 80 du conteneur Nginx
     volumes:
       - ./:/var/www/html
       - ./docker/nginx/conf.d:/etc/nginx/conf.d
