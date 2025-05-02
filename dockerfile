@@ -30,7 +30,8 @@ WORKDIR /var/app/prod/wally-app
 COPY . /var/app/prod/wally-app/
 
 # Installation des dépendances Composer
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --verbose
+
 
 COPY .env.example .env
 
