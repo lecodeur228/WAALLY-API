@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "ghcr.io/waally-api:latest"
+        IMAGE_NAME = "ghcr.io/lecodeur228/waally-api:latest"
         CONTAINER_NAME = "wally-app"
         SERVER_USER = "root"
         SERVER_IP = "213.210.20.19"
