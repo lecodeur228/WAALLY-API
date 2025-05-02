@@ -30,36 +30,38 @@ pipeline {
         stage('Deploy on VPS') {
             steps {
                 script {
+                    // Utilisation de l'identifiant d'authentification SSH pour exécuter les commandes distantes
                     sshagent(['server-ssh-key']) {
                         sh """
-                        ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
-                        echo "🛠 Vérification du répertoire $DEPLOY_PATH"
-                        if [ ! -d "$DEPLOY_PATH" ]; then
-                            echo "Création du dossier projet!"
-                            mkdir -p $DEPLOY_PATH
-                        fi
+                            ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
+                            set -e
 
-                        echo "📂 Vérification du contenu du dossier Laravel..."
-                        if [ -z "\$(ls -A $DEPLOY_PATH)" ]; then
-                            echo "🚀 Copie des fichiers Laravel depuis le conteneur..."
-                            CONTAINER_ID=\$(docker create $IMAGE_NAME)
-                            docker cp \$CONTAINER_ID:/var/app/prod/sygpre/. $DEPLOY_PATH
-                            docker rm \$CONTAINER_ID
-                        fi
+                            echo "🛠 Vérification du répertoire $DEPLOY_PATH"
+                            if [ ! -d "$DEPLOY_PATH" ]; then
+                                echo "📁 Création du dossier de déploiement..."
+                                mkdir -p $DEPLOY_PATH
+                            fi
 
-                        echo "🛠 Stopping old containers.."
-                        docker-compose -f $DEPLOY_PATH/docker-compose.yml down || true
+                            echo "📂 Vérification du contenu du dossier Laravel..."
+                            if [ -z "\$(ls -A $DEPLOY_PATH)" ]; then
+                                echo "🚀 Copie des fichiers Laravel depuis le conteneur Docker..."
+                                CONTAINER_ID=\$(docker create $IMAGE_NAME)
+                                docker cp \$CONTAINER_ID:/var/app/prod/wally-app/. $DEPLOY_PATH
+                                docker rm \$CONTAINER_ID
+                            fi
 
-                        echo "🔄 Pulling latest image.."
-                        docker pull $IMAGE_NAME
+                            echo "🛑 Arrêt des anciens conteneurs..."
+                            docker-compose -f $DEPLOY_PATH/docker-compose.yml down || true
 
-                        echo "🚀 Starting application..."
-                        cd $DEPLOY_PATH
-                        docker-compose up -d --force-recreate --build
+                            echo "🔄 Récupération de la dernière image Docker..."
+                            docker pull $IMAGE_NAME
 
-                        echo "✅ Deployment complete!"
-                        exit 0
-EOF
+                            echo "🚀 Démarrage de l'application..."
+                            cd $DEPLOY_PATH
+                            docker-compose up -d --force-recreate --build
+
+                            echo "✅ Déploiement terminé avec succès !"
+                            EOF
                         """
                     }
                 }
