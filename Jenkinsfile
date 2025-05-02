@@ -51,14 +51,14 @@ pipeline {
                             fi
 
                             echo "🛑 Arrêt des anciens conteneurs..."
-                            docker-compose -f $DEPLOY_PATH/docker-compose.yml down || true
+                            docker compose -f $DEPLOY_PATH/docker-compose.yml down || true
 
                             echo "🔄 Récupération de la dernière image Docker..."
                             docker pull $IMAGE_NAME
 
                             echo "🚀 Démarrage de l'application..."
                             cd $DEPLOY_PATH
-                            docker-compose up -d --force-recreate --build
+                            docker compose up -d --force-recreate --build
 
                             echo "✅ Déploiement terminé avec succès !"
                             EOF
